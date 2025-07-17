@@ -1,0 +1,47 @@
+/* Hamburger toggle (shown on small screens) */
+.hamburger-wrapper {
+  display: none;
+  position: absolute;
+  top: 30px;
+  left: 20px;
+  z-index: 100;
+}
+
+/* Hamburger icon (styled as big clickable text) */
+.hamburger {
+  font-size: 30px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* Mobile dropdown menu */
+.mobile-menu {
+  position: absolute;
+  top: 70px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.mobile-menu a {
+  color: white;
+  text-decoration: none;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+/* Responsive: show hamburger, hide full navbar */
+@media (max-width: 768px) {
+  .navbar {
+    display: none;
+  }
+
+  .hamburger-wrapper {
+    display: block;
+  }
+}

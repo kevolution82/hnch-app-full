@@ -1,0 +1,158 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 100px);
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.login-form {
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 20px;
+  padding: 32px 36px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.login-form h2 {
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.login-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  margin-bottom: 6px;
+  gap: 6px;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"],
+.login-form input[type="email"] {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  margin-top: 4px;
+  background-color: #222;
+  color: #fff;
+  outline: none;
+  box-shadow: 0 0 2px #000;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* focused input */
+.login-form input:focus {
+  background-color: #333;
+  color: #fff;
+  box-shadow: 0 0 6px #0078d7;
+}
+
+/* chrome, edge, safari autofill fix */
+.login-form input:-webkit-autofill,
+.login-form input:-webkit-autofill:focus,
+.login-form input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #222 inset !important;
+  box-shadow: 0 0 0 1000px #222 inset !important;
+  -webkit-text-fill-color: #fff !important;
+  color: #fff !important;
+  caret-color: #fff;
+  border: none;
+  background-clip: padding-box !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+/* firefox autofill fix */
+.login-form input:-moz-autofill {
+  box-shadow: 0 0 0 1000px #222 inset !important;
+  color: #fff !important;
+  caret-color: #fff;
+  border: none;
+  background-clip: padding-box !important;
+}
+
+/* error message styling */
+.login-form span {
+  font-size: 0.95rem;
+  color: orange;
+  margin-top: 2px;
+}
+
+.login-form button[type="submit"] {
+  margin-top: 15px;
+  padding: 10px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: orange;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.login-form button[type="submit"]:hover {
+  background-color: #ffaa00;
+}
+
+.create-account-link {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.create-account-link a {
+  color: orange;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.create-account-link a:hover {
+  color: #ffaa00;
+  text-decoration: underline;
+}
+
+/* make the date input as big as the other fields */
+.login-form input[type="date"] {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  margin-top: 4px;
+  background-color: #222;
+  color: #fff;
+  outline: none;
+  box-shadow: 0 0 2px #000;
+  width: 100%;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* date input */
+.login-form input[type="date"]:focus {
+  background-color: #333;
+  color: #fff;
+  box-shadow: 0 0 6px #0078d7;
+}
+
+.modal-box {
+  background: #000000d0;
+  color: white;
+  padding: 32px 40px;
+  border-radius: 16px;
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.8);
+  text-align: center;
+  max-width: 500px;
+  min-width: 320px;
+  font-size: 1.15rem;
+  line-height: 1.6;
+}

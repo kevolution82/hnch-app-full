@@ -1,42 +1,210 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* Basic reset so all elements start with a clean slate. */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Makes anchor link scrolling feel smooth.
+   Prevents horizontal scrollbars and ensures full page height. */
+html {
+  scroll-behavior: smooth;
+  min-height: 100%;
+  overflow-x: hidden;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Sets the main font and background image.
+   Backgroundcovers the entire screen and stays centered.
+   Also disables horizontal scrolling. */
+body {
+  font-family: 'Bebas Neue', sans-serif;
+  background-image: url('/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  width: 100vw;
+  color: white;
+  overflow-x: hidden;
+}
+
+/* Places the nav in the center near the top. Keeps the items spaced and above other elements. */
+.navbar {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 30px;
+  z-index: 10;
+}
+
+/* Styles each nav link to look like a button with a semi-transparent background. */
+.navbar a {
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
+  padding: 10px 24px;
+  border: 2px solid white;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  transition: background-color 0.3s ease;
+}
+
+/* Adds a slight glow effect when hovering over links. */
+.navbar a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+}
+
+/* Simple footer layout. Centers the content with a dark background to make everyhing easier to read. */
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 20px;
+  background-color: #3a1d00;
+  color: white;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+/* Footer link stays white by default and underlined to make it easier to read. */
+.footer-link {
+  color: white;
+  font-size: 16px;
+  text-transform: none;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+/* Changes link color when hovered to show it's interactive. */
+.footer-link:hover {
+  color: #ffcc66;
+}
+
+/* Used for mobile — hidden on desktop by default. will be toggled visible on smaller screens. */
+.hamburger-wrapper {
+  display: none;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+}
+
+/* The hamburger button is just a styled text symbol. No border or background to keep it minimal. */
+.hamburger {
+  font-size: 32px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* Styles the dropdown nav for mobile view. Appears just below the hamburger icon. */
+.mobile-menu {
+  position: absolute;
+  top: 60px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 8px;
+  padding: 15px;
+  width: max-content;
+}
+
+/* Menu links for mobile. They are spaced out and tappable. */
+.mobile-menu a {
+  color: white;
+  text-decoration: none;
+  margin: 10px 0;
+  font-size: 20px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: background 0.3s;
+}
+
+/* Light hover feedback on mobile menu links. */
+.mobile-menu a:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Switches from desktop navbar to hamburger on smaller screens. */
+@media (max-width: 768px) {
+  .navbar {
+    display: none;
   }
-  to {
-    transform: rotate(360deg);
+
+  .hamburger-wrapper {
+    display: block;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* Main wrapper for the app. It keeps everything vertical and full height. */
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow: hidden;
 }
 
-.card {
-  padding: 2em;
+/* This makes the main content scroll if it's taller than the screen. Useful for pages like Hire or Gigs. */
+.content {
+  flex: 1;
+  overflow-y: auto;
 }
 
-.read-the-docs {
-  color: #888;
+/* Optional class to prevent scrolling. It's used for homepage or splash screens. */
+.page-wrapper.no-scroll .content {
+  overflow: hidden;
+}
+
+/* (Might be unused) Legacy wallet display styling. Can probably be removed if wallet-ui is the active one. :| */
+.wallet-display {
+  position: fixed;
+  top: 15px;
+  right: 25px;
+  z-index: 1000;
+  font-size: 26px;
+  font-weight: bold;
+  color: #00ff77;
+  text-shadow: 
+    -1px -1px 0 #000,  
+    1px -1px 0 #000,  
+    -1px 1px 0 #000,  
+    1px 1px 0 #000,
+    2px 2px 4px black;
+  background: none;
+  padding: 0;
+}
+
+/* Wallet shown in top right corner. Positioned above everything else and not clickable. */
+.wallet-ui {
+  position: fixed;
+  top: 16px;
+  right: 24px;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 28px;
+  font-family: 'Arial Black', sans-serif;
+  pointer-events: none;
+}
+
+/* Bright green amount text with shadow to make it easier to read. */
+.wallet-amount {
+  color: #00ff88;
+  font-weight: bold;
+  margin-left: 10px;
+  text-shadow:
+    -1px -1px 0 #000,
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000,
+     2px 2px 6px #000;
 }

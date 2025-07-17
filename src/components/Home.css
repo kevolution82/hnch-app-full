@@ -1,0 +1,23 @@
+/* Main layout for the home page – leaves room for the navbar */
+.home-page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 100px); 
+}
+
+/* Centers the logo vertically with space from the top */
+.home-logo-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 60px; 
+}
+
+/* Responsive logo scaling */
+.main-logo {
+  width: 900px;
+  max-width: 90%;
+  height: auto;
+  object-fit: contain;
+}

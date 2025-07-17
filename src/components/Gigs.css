@@ -1,0 +1,109 @@
+/* Page layout with top padding for navbar */
+.gigs-container {
+  padding: 100px 20px 40px;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+/* Centered Add Gig button */
+.gigs-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* Button to add a new gig – styled and centered */
+.add-gig-btn {
+  padding: 10px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: orange;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 0 auto;
+}
+
+/* Shared styles across gig sections */
+.gig-list, .gig-detail, .gig-form {
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 15px;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Gig titles look clickable */
+.gig-title {
+  font-size: 18px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 5px;
+  transition: color 0.2s;
+}
+
+/* Hover effect to make it pop */
+.gig-title:hover {
+  color: orange;
+}
+
+/* Section header inside gig details */
+.gig-detail h2 {
+  margin-bottom: 10px;
+  color: orange;
+}
+
+/* Adds space between detail paragraphs*/
+.gig-detail p {
+  margin: 8px 0;
+}
+
+/* Edit/Delete buttons with spacing */
+.gig-detail-actions button {
+  margin-right: 10px;
+  margin-top: 20px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.gig-form label {
+  display: block;
+  margin-bottom: 15px;
+}
+
+.gig-form input,
+.gig-form textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  margin-top: 5px;
+}
+
+/* Button row with spacing in form */
+.gig-form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Message when there are no gigs */
+.no-gigs {
+  text-align: center;
+  padding: 30px;
+  color: #ffcc00;
+}
+
+/* Logo positioning below navbar */
+.screen-logo {
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 120px auto 30px; 
+}

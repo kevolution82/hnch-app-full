@@ -1,0 +1,340 @@
+/* Main wrapper for Hire and MyGoons pages */
+.hire-container {
+  padding: 40px 20px;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+/* Sort bar under mobile menu */
+.filter-bar {
+  margin-top: 80px;
+  margin-bottom: 30px;
+  font-size: 18px;
+  z-index: 2;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+/* Styling for the dropdown in the filter bar */
+.filter-bar select {
+  padding: 6px;
+  font-size: 16px;
+  background: black;
+  color: white;
+  border-radius: 6px;
+  border: 1px solid white;
+}
+
+/* Vertical list of goon cards with even spacing */
+.goon-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Layout for each goon card */
+.goon-card {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  width: 100%;
+}
+
+/* Goon image size and appearance */
+.goon-pic {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  background: cyan;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+/* Text block holding goon details */
+.goon-info {
+  width: 100%;
+  flex-grow: 1;
+  word-break: break-word;
+}
+
+.goon-info h2 {
+  margin: 0 0 10px;
+  font-size: 24px;
+  color: orange;
+}
+
+/* Text styles for goon info */
+.goon-info p {
+  margin: 4px 0;
+  font-size: 16px;
+  line-height: 1.5;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  display: block;
+}
+
+/* MyGoons team name input bar */
+.hire-btn {
+  margin-top: 15px;
+  padding: 10px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: orange;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.hire-btn:hover {
+  background-color: #ffaa00;
+}
+
+.green {
+  color: #00ff00;
+}
+
+/* Goon card switches to row layout on wider screens */
+@media (min-width: 768px) {
+  .goon-card {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .goon-pic {
+    margin-right: 20px;
+    margin-bottom: 0;
+  }
+}
+
+/* Banner for feedback like a successful hire */
+.popup-banner {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.7); /* 0.7 = 70% black LEAVE THIS ALONE */
+  padding: 24px 36px;
+  border-radius: 12px;
+  font-size: 26px;
+  font-weight: bold;
+  z-index: 9999;
+  text-align: center;
+  animation: fadeInOut 2s ease-in-out;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Animation for popup appearing and fading out */
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translate(-50%, -60%); }
+  10% { opacity: 1; transform: translate(-50%, -50%); }
+  90% { opacity: 1; transform: translate(-50%, -50%); }
+  100% { opacity: 0; transform: translate(-50%, -60%); }
+}
+
+/* Bar at top of MyGoons for entering or editing a team name */
+.team-name-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 16px;
+  padding: 0 16px;
+}
+
+/* Label next to the input */
+.team-label {
+  font-weight: bold;
+  margin-right: 8px;
+  color: white;
+}
+
+.team-name-input {
+  font-size: 18px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  max-width: 280px;
+  background-color: #222;
+  color: #ff9900;
+}
+
+/* Wrapper to center the large editable team title */
+.team-title-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+  margin-bottom: 30px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Static team title display */
+.team-title {
+  font-size: 48px;
+  font-weight: 900;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+  -webkit-text-stroke: 1.5px black;
+  text-shadow:
+    3px 3px 0 black,
+    3px 3px 0 black,
+    3px 3px 0 black;
+  padding: 0 20px;
+}
+
+/* Input version of the title for editing */
+.team-title-input {
+  font-size: 48px;
+  font-weight: 900;
+  color: orange;
+  background: black;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  text-align: center;
+  max-width: 80%;
+  outline: none;
+  -webkit-text-stroke: 0.5px #000;
+  box-shadow: 3px 3px 0 black;
+}
+
+/* Dark backdrop for image popup */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeInBackdrop 0.3s ease;
+}
+
+/* Centered image and name in popup */
+.popup-image-box {
+  background: black;
+  border-radius: 20px;
+  padding: 20px;
+  text-align: center;
+  animation: scaleUp 0.3s ease;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+}
+
+.popup-image {
+  max-width: 90vw;
+  max-height: 70vh;
+  border-radius: 12px;
+  object-fit: contain;
+}
+
+.popup-name {
+  margin-top: 12px;
+  font-size: 24px;
+  font-weight: bold;
+  color: orange;
+  text-align: center;
+}
+
+/* Fade in animation for overlay */
+@keyframes fadeInBackdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Scale animation for popup box */
+@keyframes scaleUp {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Centered logo for different screens */
+.screen-logo {
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 120px auto 30px;
+}
+
+@media (max-width: 768px) {
+  .screen-logo {
+    margin-top: 100px;
+  }
+}
+
+/* Layout for when there are no goons on the team */
+.no-goons-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.no-goons-img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  display: block;
+}
+
+/* Scroll to top button in lower corner of screen */
+.scroll-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #ffcc66;
+  color: #000;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.2s ease;
+  z-index: 1000;
+}
+
+.scroll-to-top:hover {
+  background-color: #ffaa00;
+}
+
+/* Animation for cards appearing when page loads */
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.goon-card {
+  animation: popIn 0.4s ease-out;
+}
