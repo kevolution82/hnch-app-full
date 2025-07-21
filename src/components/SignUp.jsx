@@ -50,14 +50,7 @@ const validate = () => {
   if (form.password && form.confirmPassword && form.password !== form.confirmPassword) {
     newErrors.confirmPassword = 'ERROR! Passwords do not match.';
   }
-  // birthdate checker (MM/DD/YYYY)
-  if (
-    form.birthdate &&
-    !form.birthdate.match(/^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/)
-  ) {
-    newErrors.birthdate = 'Use the calendar to select your birthdate.';
-  }
-  // age checker (must be 18+!!!!!)
+  // age checker (must be 18+)
   if (
     form.birthdate &&
     form.birthdate.match(/^\d{4}-\d{2}-\d{2}$/)
@@ -173,7 +166,7 @@ const validate = () => {
     value={form.birthdate}
     onChange={handleChange}
     required
-    max={new Date().toISOString().split('T')[0]} // this makes sure you can't select a future date
+    max={new Date().toISOString().split('T')[0]}
     style={{ color: form.birthdate ? "#fff" : "#aaa", background: "#222" }}
   />
   {errors.birthdate && <span>{errors.birthdate}</span>}
