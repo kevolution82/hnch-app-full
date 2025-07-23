@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './Login.css'; 
+import './Login.css';
 
 function Login() {
+  // stores username and password input values
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  // handles login form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     // authentication
@@ -37,6 +39,7 @@ function Login() {
         </label>
         <button type="submit">Continue</button>
         <div className="create-account-link">
+          {/* link to signup page */}
           <Link to="/signup">Create Account</Link>
         </div>
       </form>
