@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Chatbot from './Chatbot';
+import MyGoons from './UserAccount/MyGoons';
 import './UserAccount.css';
 
 function UserAccount() {
@@ -9,6 +10,8 @@ function UserAccount() {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('account');
 
   useEffect(() => {
     // fetches user info when page loads
