@@ -15,11 +15,9 @@ function UserAccount() {
   useEffect(() => {
     // fetches user info when page loads
     async function fetchUser() {
-      console.log('Fetching user data...');
       const res = await fetch('/api/users/me');
       if (res.ok) {
         const data = await res.json();
-        console.log('User data received:', data);
         setUser(data);
         setEmail(data.email);
       }
@@ -31,26 +29,22 @@ function UserAccount() {
   // updates user email in backend
   const handleEmailChange = async e => {
     e.preventDefault();
-    console.log('Trying to update email to:', email);
     const res = await fetch('/api/users/me/email', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
     });
-    console.log('Email update response status:', res.status);
     setMessage(res.ok ? 'Email updated!' : 'Failed to update ya email.');
   };
 
   // updates user password in backend
   const handlePasswordChange = async e => {
     e.preventDefault();
-    console.log('Attempting password change...');
     const res = await fetch('/api/users/me/password', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ password }),
     });
-    console.log('Password change response:', res.status);
     setMessage(res.ok ? 'It actually worked! Password changed!' : 'Failed to change ya password!');
   };
 
