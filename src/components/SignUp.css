@@ -5,6 +5,7 @@
   align-items: center;
   justify-content: center;
   padding: 40px;
+  margin-top: 110px;
 }
 
 .login-form {
@@ -155,4 +156,11 @@
   min-width: 320px;
   font-size: 1.15rem;
   line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+  .login-container {
+    margin-top: 100px;
+    padding: 16px;
+  }
 }

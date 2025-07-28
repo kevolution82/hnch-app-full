@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import './UserAccount.css';
+import MyGoons from './MyGoons';
 
 const defaultAvatar = 'https://via.placeholder.com/150?text=Avatar';
 
-const initialTabs = ['General Information', 'Messaging'];
+const initialTabs = ['General Information', 'Messaging', 'My Goons'];
 
 const demoUserData = {
   fullName: 'Bobby DeLuca',
@@ -35,7 +36,14 @@ const demoChats = [
   },
 ];
 
-function UserAccount({ userData = demoUserData, chats = demoChats }) {
+function UserAccount({
+  userData = demoUserData,
+  chats = demoChats,
+  myGoons = [],
+  onRemove,
+  updateWallet,
+  wallet
+}) {
   const [form, setForm] = useState({
     fullName: userData?.fullName || '',
     username: userData?.username || '',
@@ -324,6 +332,15 @@ function UserAccount({ userData = demoUserData, chats = demoChats }) {
                   <div style={{ color: '#aaa' }}>Select a chat to view messages.</div>
                 )}
               </div>
+
+          {activeTab === 'My Goons' && (
+            <MyGoons
+              goons={myGoons}
+              onRemove={onRemove}
+              updateWallet={updateWallet}
+              wallet={wallet}
+            />
+          )}
             </div>
           )}
         </div>

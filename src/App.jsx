@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, Routes, Route, useLocation } from 'react-router-dom';
 import Home from './components/Home';
 import About from './components/About';
@@ -18,6 +18,15 @@ function App() {
   const userName = 'Firstie Lastberg';
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+
+  // API connection to fetch a message from the server
+  const [apiMessage, setApiMessage] = useState('');
+  useEffect(() => {
+    fetch('http://localhost:3000/api/hello')
+      .then(res => res.json())
+      .then(data => setApiMessage(data.message))
+      .catch(err => console.error(err));
+  }, []);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -48,6 +57,13 @@ const updateWallet = (amount) => {
 
   return (
     <div className={`page-wrapper ${isHomePage ? 'no-scroll' : ''}`}>
+
+      {/* API test output */}
+      {apiMessage && (
+        <div style={{ textAlign: 'center', color: 'lime', fontWeight: 'bold', marginTop: 10 }}>
+          API: {apiMessage}
+        </div>
+      )}
 
       {/* This is the wallet UI */}
       <div className="wallet-ui">
@@ -98,10 +114,20 @@ const updateWallet = (amount) => {
           <Route path="/mygoons" element={<MyGoons goons={myGoons} onRemove={handleRemove} updateWallet={updateWallet} wallet={wallet}/>} />
           <Route path="/gigs" element={<Gigs userName={userName} />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/account" element={<UserAccount />} />
-        </Routes>
-      </main>
+        <Route path="/signup" element={<SignUp />} />
+        <Route
+          path="/account"
+          element={
+            <UserAccount
+              myGoons={myGoons}
+              onRemove={handleRemove}
+              updateWallet={updateWallet}
+              wallet={wallet}
+            />
+          }
+        />
+      </Routes>
+    </main>
 
       <footer className="footer">
         <p className="footer-content">
