@@ -105,18 +105,19 @@ function UserAccount({
   const currentChat = chatList.find(chat => chat.id === selectedChat);
 
   return (
-    <div
-      className="account-container"
-      style={{
-        minHeight: '80vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        background: 'transparent',
-        width: '100%',
-        padding: '32px 0'
-      }}
-    >
+  <div
+    className="account-container"
+    style={{
+      minHeight: '80vh',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'flex-start',
+      background: 'transparent',
+      width: '100%',
+      padding: '32px 0',
+      fontFamily: 'Roboto, Arial, Helvetica, sans-serif' 
+    }}
+  >
       <div
         style={{
           display: 'flex',
@@ -124,7 +125,7 @@ function UserAccount({
           gap: '32px',
           width: '100%',
           maxWidth: '900px',
-          marginTop: '120px', // moved content further down
+          marginTop: '120px',
           marginBottom: '48px',
           boxSizing: 'border-box'
         }}
@@ -342,7 +343,7 @@ function UserAccount({
                     overflowY: 'auto'
                   }}
                 >
-                  <h3 style={{ color: 'orange', marginBottom: '10px' }}>Chats</h3>
+                  <h3 style={{ color: 'black', marginBottom: '10px' }}>Chats</h3>
                   {chatList.length === 0 && <div>No chats yet.</div>}
                   {chatList.map(chat => (
                     <div
