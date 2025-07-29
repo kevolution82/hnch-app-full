@@ -3,7 +3,6 @@ import { Link, Routes, Route, useLocation } from 'react-router-dom';
 import Home from './components/Home';
 import About from './components/About';
 import Hire from './components/Hire';
-import MyGoons from './components/MyGoons';
 import Gigs from './components/Gigs';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
@@ -74,9 +73,9 @@ const updateWallet = (amount) => {
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
         <Link to="/hire">Hire</Link>
-        <Link to="/mygoons">MyGoons</Link>
         <Link to="/gigs">Gigs</Link>
         <Link to="/login">Login</Link>
+        <Link to="/account">Account</Link>
       </nav>
 
       {/* This is the hamburger menu for mobile users */}
@@ -89,9 +88,9 @@ const updateWallet = (amount) => {
             <Link to="/" onClick={toggleMenu}>Home</Link>
             <Link to="/about" onClick={toggleMenu}>About</Link>
             <Link to="/hire" onClick={toggleMenu}>Hire</Link>
-            <Link to="/mygoons" onClick={toggleMenu}>MyGoons</Link>
             <Link to="/gigs" onClick={toggleMenu}>Gigs</Link>
             <Link to="/login" onClick={toggleMenu}>Login</Link>
+            <Link to="/account" onClick={toggleMenu}>Account</Link>
           </div>
         )}
       </div>
@@ -101,33 +100,32 @@ const updateWallet = (amount) => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route
-  path="/hire"
-  element={
-    <Hire
-      onHire={handleHire}
-      updateWallet={updateWallet}
-      wallet={wallet}
-      myGoons={myGoons}
-    />
-  }
-/>
-          <Route path="/mygoons" element={<MyGoons goons={myGoons} onRemove={handleRemove} updateWallet={updateWallet} wallet={wallet}/>} />
+            path="/hire"
+            element={
+              <Hire
+                onHire={handleHire}
+                updateWallet={updateWallet}
+                wallet={wallet}
+                myGoons={myGoons}
+              />
+            }
+          />
           <Route path="/gigs" element={<Gigs userName={userName} />} />
           <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route
-          path="/account"
-          element={
-            <UserAccount
-              myGoons={myGoons}
-              onRemove={handleRemove}
-              updateWallet={updateWallet}
-              wallet={wallet}
-            />
-          }
-        />
-      </Routes>
-    </main>
+          <Route path="/signup" element={<SignUp />} />
+          <Route
+            path="/account"
+            element={
+              <UserAccount
+                myGoons={myGoons}
+                onRemove={handleRemove}
+                updateWallet={updateWallet}
+                wallet={wallet}
+              />
+            }
+          />
+        </Routes>
+      </main>
 
       <footer className="footer">
         <p className="footer-content">
