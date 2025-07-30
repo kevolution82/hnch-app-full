@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Login.css'; 
 
 function Login() {
+  const navigate = useNavigate();
+  const [error, setError] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  // handles login form submission and checks credentials against the localStorage
   const handleSubmit = (e) => {
     e.preventDefault();
-    // authentication
-    console.log('Username:', username, 'Password:', password);
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const user = users.find(u => u.username === username && u.password === password);
+    if (user) {
+      localStorage.setItem('loggedInUser', JSON.stringify(user));
+      navigate('/account');
+    } else {
+      setError('Invalid username or password');
+    }
   };
 
   return (
@@ -35,6 +44,7 @@ function Login() {
             required
           />
         </label>
+        {error && <span style={{ color: 'orange' }}>{error}</span>}
         <button type="submit">Continue</button>
         <div className="create-account-link">
           <Link to="/signup">Create Account</Link>
