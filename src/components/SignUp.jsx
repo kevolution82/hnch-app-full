@@ -77,8 +77,19 @@ const validate = () => {
       setModal({ show: true, message: msg.trim() });
       return;
     }
-    // this is where you handle the form submission
-    console.log('Sign Up Data:', form);
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    users.push({
+      username: form.username,
+      password: form.password,
+      email: form.email,
+      fullName: form.fullName,
+      organization: form.organization,
+      aliases: form.aliases,
+      birthdate: form.birthdate
+  });
+  localStorage.setItem('users', JSON.stringify(users));
+  setModal({ show: true, message: 'Account created! Please check ya email to confirm!' });
+};
   };
 
   return (
