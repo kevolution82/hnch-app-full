@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './UserAccount.css';
 import MyGoons from './MyGoons';
 
@@ -59,6 +59,17 @@ function UserAccount({
   const [editMode, setEditMode] = useState(false);
   const [errors, setErrors] = useState({});
   const [selectedChat, setSelectedChat] = useState(chats?.[0]?.id || null);
+  const [messageInput, setMessageInput] = useState('');
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+  if (activeTab === 'Messaging' && userData?.id) {
+    fetch(`http://localhost:8080/api/messages/${userData.id}`)
+      .then(res => res.json())
+      .then(data => setMessages(data))
+      .catch(() => setMessages([]));
+  }
+}, [activeTab, userData?.id]);
 
   // does the avatar upload
   const handleAvatarChange = e => {
@@ -363,52 +374,58 @@ function UserAccount({
                   ))}
                 </div>
                 {/* chat window */}
-                <div
-                  style={{
-                    flex: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    background: '#222',
-                    borderRadius: '12px',
-                    padding: '18px',
-                    overflowY: 'auto',
-                    minWidth: 0
-                  }}
-                >
-                  {currentChat ? (
+                <div style={{ flex: 1, overflowY: 'auto', marginBottom: '12px' }}>
+                  {selectedChat ? (
                     <>
-                      <h3 style={{ color: 'orange', marginBottom: '10px' }}>{currentChat.name}</h3>
-                      <div style={{ flex: 1, overflowY: 'auto', marginBottom: '12px' }}>
-                        {currentChat.messages.map((msg, idx) => (
-                          <div
-                            key={idx}
+                      {messages.map((msg, idx) => (
+                        <div
+                          key={idx}
+                          style={{
+                            marginBottom: '10px',
+                            textAlign: msg.sender === form.username ? 'right' : 'left'
+                          }}
+                        >
+                          <span
                             style={{
-                              marginBottom: '10px',
-                              textAlign: msg.sender === form.username ? 'right' : 'left'
+                              background: msg.sender === form.username ? 'orange' : '#444',
+                              color: msg.sender === form.username ? '#222' : '#fff',
+                              padding: '8px 12px',
+                              borderRadius: '8px',
+                              display: 'inline-block',
+                              maxWidth: '70%'
                             }}
                           >
-                            <span
-                              style={{
-                                background: msg.sender === form.username ? 'orange' : '#444',
-                                color: msg.sender === form.username ? '#222' : '#fff',
-                                padding: '8px 12px',
-                                borderRadius: '8px',
-                                display: 'inline-block',
-                                maxWidth: '70%'
-                              }}
-                            >
-                              <strong>{msg.sender}:</strong> {msg.text}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
+                            <strong>{msg.sender}:</strong> {msg.text}
+                          </span>
+                        </div>
+                      ))}
                       {/* message input */}
                       <form style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }} onSubmit={e => {
                         e.preventDefault();
+                        if (!messageInput.trim()) return;
+                        fetch('http://localhost:8080/api/messages', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json'
+                          },
+                          body: JSON.stringify({
+                            userId: userData.id,
+                            text: messageInput,
+                            sender: 'user',
+                            timestamp: new Date()
+                          })
+                        })
+                          .then(res => res.json())
+                          .then(data => {
+                            setMessages(data);
+                            setMessageInput('');
+                          });
                       }}>
                         <input
                           type="text"
                           placeholder="Type a message..."
+                          value={messageInput}
+                          onChange={e => setMessageInput(e.target.value)}
                           style={{
                             flex: 1,
                             padding: '10px',
@@ -456,7 +473,7 @@ function UserAccount({
       {/* makes it responsive */}
       <style>
         {`
-          @media (max-width: 900px) {
+          @media (max-width:900px) {
             .account-container > div {
               flex-direction: column !important;
               gap: 0 !important;
