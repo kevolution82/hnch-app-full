@@ -90,7 +90,6 @@ const validate = () => {
   localStorage.setItem('users', JSON.stringify(users));
   setModal({ show: true, message: 'Account created! Please check ya email to confirm!' });
 };
-  };
 
   return (
     <div className="login-container">
