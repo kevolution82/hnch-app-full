@@ -1,0 +1,19 @@
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+
+entities:
+  - name
+  - hobby
+
+responses:
+  utter_greet:
+    - text: "Ssssslithering in... What’s your desire?"
+  utter_goodbye:
+    - text: "Coiling away now... Farewell."
+  utter_ask_name:
+    - text: "What is your name... (speak slowly)"
+  utter_name_confirm:
+    - text: "Interesting... {name}."

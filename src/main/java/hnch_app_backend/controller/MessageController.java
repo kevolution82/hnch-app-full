@@ -2,13 +2,16 @@ package hnch_app_backend.controller;
 
 // this is the message controller for sending and getting messages
 // it uses the message repository to save and find messages
-// ai replies are simple for now, can be replaced with a real (in character) bot later
+// now it will get ai replies from the gemini server
 
 import hnch_app_backend.model.Message;
 import hnch_app_backend.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+import java.util.HashMap;
+import java.util.Map;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,17 +22,38 @@ public class MessageController {
     @Autowired
     private MessageRepository messageRepo;
 
-    // send a message and get ai reply
+    // send a message and get ai reply from gemini
     @PostMapping
     public List<Message> sendMessage(@RequestBody Message msg) {
         msg.setSender("user");
         msg.setTimestamp(LocalDateTime.now());
         messageRepo.save(msg);
 
-        // simple ai reply
+        // talk to the gemini ai server for a reply
+        String userMessage = msg.getText();
+        String geminiApiUrl = "http://localhost:4000/api/gemini-chat";
+        String aiReplyText = "sorry, i got nothin' right now.";
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            Map<String, String> request = new HashMap<>();
+            request.put("message", userMessage);
+
+            ResponseEntity<Map> response = restTemplate.postForEntity(geminiApiUrl, request, Map.class);
+            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                Object replyObj = response.getBody().get("reply");
+                if (replyObj != null) {
+                    aiReplyText = replyObj.toString();
+                }
+            }
+        } catch (Exception e) {
+            // log the error if needed
+            System.out.println("could not get ai reply: " + e.getMessage());
+        }
+
         Message aiReply = new Message();
         aiReply.setUserId(msg.getUserId());
-        aiReply.setText("Big Sal says: " + msg.getText());
+        aiReply.setText(aiReplyText);
         aiReply.setSender("Big Sal");
         aiReply.setTimestamp(LocalDateTime.now());
         messageRepo.save(aiReply);

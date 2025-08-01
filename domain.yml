@@ -1,0 +1,27 @@
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+
+entities:
+  - name
+  - hobby
+
+slots:
+  name:
+    type: text
+    influence_conversation: true
+  hobby:
+    type: text
+    influence_conversation: true
+
+responses:
+  utter_greet:
+    - text: "Hello! How can I help you?"
+  utter_goodbye:
+    - text: "Goodbye!"
+  utter_ask_name:
+    - text: "What's your name?"
+  utter_name_confirm:
+    - text: "{name} is a great name!"
