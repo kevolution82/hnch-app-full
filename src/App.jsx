@@ -7,6 +7,7 @@ import Gigs from './components/Gigs';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import UserAccount from './components/UserAccount';
+import NotFound from './components/404';
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -119,6 +120,7 @@ const updateWallet = (amount) => {
           />
           <Route path="/gigs" element={<Gigs userName={userName} />} />
           <Route path="/login" element={<Login />} />
+          <Route path="*" element={<NotFound />} />
           <Route path="/signup" element={<SignUp />} />
             <Route
             path="/account"

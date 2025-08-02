@@ -1,0 +1,2 @@
+INSERT INTO user (username, password, email, role) VALUES ('admin', 'adminpass', 'admin@example.com', 'ADMIN');
+INSERT INTO user (username, password, email, role) VALUES ('user1', 'userpass', 'user1@example.com', 'USER');
