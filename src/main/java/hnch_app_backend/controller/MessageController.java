@@ -68,5 +68,21 @@ public class MessageController {
     public List<Message> getMessages(@PathVariable Long userId) {
         return messageRepo.findByUserId(userId);
     }
+
+    // update a message
+    @PutMapping("/{id}")
+    public Message updateMessage(@PathVariable Long id, @RequestBody Message updatedMsg) {
+        Message msg = messageRepo.findById(id).orElseThrow();
+        msg.setText(updatedMsg.getText());
+        msg.setSender(updatedMsg.getSender());
+        msg.setTimestamp(updatedMsg.getTimestamp());
+        return messageRepo.save(msg);
+    }
+
+    // delete a message
+    @DeleteMapping("/{id}")
+    public void deleteMessage(@PathVariable Long id) {
+        messageRepo.deleteById(id);
+    }
 }
 

@@ -88,6 +88,15 @@ const validate = () => {
       birthdate: form.birthdate
   });
   localStorage.setItem('users', JSON.stringify(users));
+  localStorage.setItem('userProfile', JSON.stringify({
+    username: form.username,
+    fullName: form.fullName,
+    email: form.email,
+    organization: form.organization,
+    aliases: form.aliases,
+    birthdate: form.birthdate,
+    avatar: 'https://via.placeholder.com/150?text=Avatar'
+  }));
   setModal({ show: true, message: 'Account created! Please check ya email to confirm!' });
 };
 

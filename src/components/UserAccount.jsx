@@ -257,7 +257,7 @@ useEffect(() => {
                   onChange={handleChange}
                   disabled={!editMode}
                   required
-                  style={{ color: '#111', background: '#222', width: '100%' }}
+                  style={{ color: '#fff', background: '#222', width: '100%' }}
                 />
                 {errors.fullName && <span style={{ color: '#111' }}>{errors.fullName}</span>}
               </label>
@@ -270,7 +270,7 @@ useEffect(() => {
                   onChange={handleChange}
                   disabled={!editMode}
                   required
-                  style={{ color: '#111', background: '#222', width: '100%' }}
+                  style={{ color: '#fff', background: '#222', width: '100%' }}
                 />
                 {errors.username && <span style={{ color: '#111' }}>{errors.username}</span>}
               </label>
@@ -283,7 +283,7 @@ useEffect(() => {
                   onChange={handleChange}
                   disabled={!editMode}
                   required
-                  style={{ color: '#111', background: '#222', width: '100%' }}
+                  style={{ color: '#fff', background: '#222', width: '100%' }}
                 />
                 {errors.email && <span style={{ color: '#111' }}>{errors.email}</span>}
               </label>
@@ -295,7 +295,7 @@ useEffect(() => {
                   value={form.organization}
                   onChange={handleChange}
                   disabled={!editMode}
-                  style={{ color: '#111', background: '#222', width: '100%' }}
+                  style={{ color: '#fff', background: '#222', width: '100%' }}
                 />
               </label>
               <label style={{ color: '#111', width: '100%', display: 'block' }}>
@@ -306,7 +306,7 @@ useEffect(() => {
                   value={form.aliases}
                   onChange={handleChange}
                   disabled={!editMode}
-                  style={{ color: '#111', background: '#222', width: '100%' }}
+                  style={{ color: '#fff', background: '#222', width: '100%' }}
                 />
               </label>
               <label style={{ color: '#111', width: '100%', display: 'block' }}>
@@ -319,9 +319,9 @@ useEffect(() => {
                   disabled={!editMode}
                   required
                   max={new Date().toISOString().split('T')[0]}
-                  style={{ color: '#111', background: '#222', width: '100%' }}
+                  style={{ color: '#fff', background: '#222', width: '100%' }}
                 />
-                {errors.birthdate && <span style={{ color: '#111' }}>{errors.birthdate}</span>}
+                {errors.birthdate && <span style={{ color: '#fff' }}>{errors.birthdate}</span>}
               </label>
               <div style={{ display: 'flex', gap: '12px', marginTop: '18px', flexWrap: 'wrap' }}>
                 {!editMode ? (
