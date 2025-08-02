@@ -19,20 +19,31 @@ const demoUserData = {
 
 const demoChats = [
   {
-    id: 'chat1',
-    name: 'Support',
+    id: 'sal',
+    name: 'Big Sal',
     messages: [
-      { sender: 'Support', text: "Hello! How's can we help you today?" },
-      { sender: 'coldplayfan82', text: "Hi, I heard you're the guy to talk about a certain thing." },
-      { sender: 'Support', text: 'Sure, ask away!' },
+      { sender: 'Big Sal', text: "Ay, I saw your gig post. You need muscle or you need brains? Either way, I'm your guy. Let's talk business." }
     ],
   },
   {
-    id: 'chat2',
-    name: 'Friend',
+    id: 'sssteven',
+    name: 'Sssteven',
     messages: [
-      { sender: 'Friend', text: "Hey Bobby, are you comin' to the docks tonight?" },
-      { sender: 'coldplayfan82', text: 'Say less.' },
+      { sender: 'Sssteven', text: "Hisss... I sssaw your gig. Doesss it involve ratsss? I can handle ratsss... for a price." }
+    ],
+  },
+  {
+    id: 'grandma',
+    name: 'Grandma',
+    messages: [
+      { sender: 'Grandma', text: "Hi honey, can you help me with the remote again? I can't find the Netflix button. Love you!" }
+    ],
+  },
+  {
+    id: 'voice',
+    name: 'Petey No-Nose',
+    messages: [
+      { sender: 'Petey No-Nose', text: "🔊 [Voice message] You have a new voice message. (Imagine a play button here!)" }
     ],
   },
 ];
@@ -64,13 +75,12 @@ function UserAccount({
   const [messages, setMessages] = useState([]);
 
 useEffect(() => {
-  if (activeTab === 'Messaging' && userData?.id) {
-    fetch(`http://localhost:8080/api/messages/${userData.id}`)
-      .then(res => res.json())
-      .then(data => setMessages(data))
-      .catch(() => setMessages([]));
+  if (activeTab === 'Messaging') {
+    // update messages when selectedChat changes
+    const chat = chats.find(c => c.id === selectedChat);
+    setMessages(chat ? chat.messages : []);
   }
-}, [activeTab, userData?.id]);
+}, [activeTab, selectedChat, chats]);
 
   // does the avatar upload
   const handleAvatarChange = e => {
