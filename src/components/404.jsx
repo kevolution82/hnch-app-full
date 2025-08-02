@@ -1,6 +1,6 @@
 import React from 'react';
 // import the same css as the home screen so it matches
-import './Home.css';
+import './404.css';
 
 // this is the not found 404 page component
 function NotFound() {
@@ -9,7 +9,7 @@ function NotFound() {
     <div className="home-page">
       <div className="home-logo-wrapper">
         {/* show the 404 image in the center of the page */}
-        <img src="404-logo.png" alt="404 Not Found" className="main-logo" />
+        <img key={performance.now()} src="404-logo.png" alt="404 Not Found" className="main-logo" />
       </div>
     </div>
   );
