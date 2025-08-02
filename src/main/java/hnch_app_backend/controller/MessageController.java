@@ -5,15 +5,19 @@ package hnch_app_backend.controller;
 // now it will get ai replies from the gemini server
 
 import hnch_app_backend.model.Message;
+import hnch_app_backend.model.User;
+import hnch_app_backend.repository.UserRepository;
 import hnch_app_backend.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.Map;
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -22,7 +26,12 @@ public class MessageController {
 
     @Autowired
     private MessageRepository messageRepo;
+    private final UserRepository userRepo;
 
+    public MessageController(MessageRepository messageRepo, UserRepository userRepo) {
+        this.messageRepo = messageRepo;
+        this.userRepo = userRepo;
+    }
     // send a message and get ai reply from gemini
     @PostMapping
     public List<Message> sendMessage(@RequestBody Message msg) {
@@ -81,8 +90,13 @@ public class MessageController {
 
     // delete a message
     @DeleteMapping("/{id}")
-    public void deleteMessage(@PathVariable Long id) {
+    public ResponseEntity<?> deleteMessage(@PathVariable Long id, @RequestParam String username) {
+        User user = userRepo.findByUsername(username);
+        if (user == null || !"ADMIN".equals(user.getRole())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only admins can delete messages.");
+        }
         messageRepo.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }
 
