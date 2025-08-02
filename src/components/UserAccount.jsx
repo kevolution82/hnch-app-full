@@ -409,18 +409,24 @@ useEffect(() => {
                             }}
                           >
                             <span
+                              className="chat-message-bubble"
                               style={{
                                 background: msg.sender === form.username ? 'orange' : '#444',
                                 color: msg.sender === form.username ? '#222' : '#fff',
                                 padding: '8px 12px',
                                 borderRadius: '8px',
                                 display: 'inline-block',
-                                maxWidth: '70%'
+                                maxWidth: '70%',
+                                width: 'auto'
                               }}
                             >
                               <strong>{msg.sender}:</strong> {msg.text}
                               {msg.audio && (
-                                <audio controls style={{ display: 'block', marginTop: '8px' }}>
+                                <audio
+                                  className="chat-audio"
+                                  controls
+                                  style={{ display: 'block', marginTop: '8px', width: '100%' }}
+                                >
                                   <source src={msg.audio} type="audio/wav" />
                                   Your browser does not support this thing.
                                 </audio>
@@ -505,35 +511,6 @@ useEffect(() => {
           />
         </div>
       )}
-      {/* makes it responsive */}
-      <style>
-        {`
-          @media (max-width:900px) {
-            .account-container > div {
-              flex-direction: column !important;
-              gap: 0 !important;
-              max-width: 100vw !important;
-              padding: 0 8px !important;
-            }
-            .account-form {
-              max-width: 100vw !important;
-              padding: 0 !important;
-            }
-          }
-          @media (max-width: 600px) {
-            .account-container {
-              padding: 8px 0 !important;
-            }
-            .account-form {
-              max-width: 100vw !important;
-              padding: 0 !important;
-            }
-            .account-container > div > div {
-              padding-left: 0 !important;
-            }
-          }
-        `}
-      </style>
         </div>
       </div>
     </div>
