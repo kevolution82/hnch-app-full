@@ -43,7 +43,9 @@ const demoChats = [
     id: 'voice',
     name: 'Petey No-Nose',
     messages: [
-      { sender: 'Petey No-Nose', text: "🔊 [Voice message] You have a new voice message. (Imagine a play button here!)" }
+      { sender: 'Petey No-Nose',
+        audio: '/petey.mp3',
+        text: "🔊 [Voice message]" }
     ],
   },
 ];
