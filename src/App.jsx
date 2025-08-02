@@ -64,10 +64,12 @@ const updateWallet = (amount) => {
         </div>
       )}
 
-      {/* This is the wallet UI */}
-      <div className="wallet-ui">
-        💸 <span className="wallet-amount">${wallet.toLocaleString()}</span>
-      </div>
+      {/* only show the wallet if someone is logged in */}
+      {localStorage.getItem('loggedInUser') && (
+        <div className="wallet-ui">
+          💸 <span className="wallet-amount">${wallet.toLocaleString()}</span>
+        </div>
+      )}
 
       <nav className="navbar">
         <Link to="/">Home</Link>
