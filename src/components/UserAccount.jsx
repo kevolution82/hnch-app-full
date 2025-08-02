@@ -63,7 +63,7 @@ function UserAccount({
   const [messageInput, setMessageInput] = useState('');
   const [messages, setMessages] = useState([]);
 
-  useEffect(() => {
+useEffect(() => {
   if (activeTab === 'Messaging' && userData?.id) {
     fetch(`http://localhost:8080/api/messages/${userData.id}`)
       .then(res => res.json())
@@ -374,32 +374,43 @@ function UserAccount({
                     </div>
                   ))}
                 </div>
-                {/* chat window */}
-                <div style={{ flex: 1, overflowY: 'auto', marginBottom: '12px' }}>
+                {/* chat window and message input */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
                   {selectedChat ? (
                     <>
-                      {messages.map((msg, idx) => (
-                        <div
-                          key={idx}
-                          style={{
-                            marginBottom: '10px',
-                            textAlign: msg.sender === form.username ? 'right' : 'left'
-                          }}
-                        >
-                          <span
+                      <div
+                        style={{
+                          height: '650px',
+                          overflowY: 'auto',
+                          marginBottom: '12px',
+                          background: '#222',
+                          borderRadius: '10px',
+                          padding: '12px'
+                        }}
+                      >
+                        {messages.map((msg, idx) => (
+                          <div
+                            key={idx}
                             style={{
-                              background: msg.sender === form.username ? 'orange' : '#444',
-                              color: msg.sender === form.username ? '#222' : '#fff',
-                              padding: '8px 12px',
-                              borderRadius: '8px',
-                              display: 'inline-block',
-                              maxWidth: '70%'
+                              marginBottom: '10px',
+                              textAlign: msg.sender === form.username ? 'right' : 'left'
                             }}
                           >
-                            <strong>{msg.sender}:</strong> {msg.text}
-                          </span>
-                        </div>
-                      ))}
+                            <span
+                              style={{
+                                background: msg.sender === form.username ? 'orange' : '#444',
+                                color: msg.sender === form.username ? '#222' : '#fff',
+                                padding: '8px 12px',
+                                borderRadius: '8px',
+                                display: 'inline-block',
+                                maxWidth: '70%'
+                              }}
+                            >
+                              <strong>{msg.sender}:</strong> {msg.text}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                       {/* message input */}
                       <form style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }} onSubmit={e => {
                         e.preventDefault();
@@ -460,24 +471,22 @@ function UserAccount({
                       </form>
                     </>
                   ) : (
-                    <div style={{ color: '#aaa' }}>Select a chat to view messages.</div>
+                    <div style={{ color: '#aaa', flex: 1 }}>Select a chat to view messages.</div>
                   )}
                 </div>
               </div>
             </div>
           )}
-          {activeTab === 'My Goons' && (
-            <div style={{ width: '100%', margin: '0 auto', maxWidth: '600px' }}>
-              <MyGoons
-                goons={myGoons}
-                onRemove={onRemove}
-                updateWallet={updateWallet}
-                wallet={wallet}
-              />
-            </div>
-          )}
+      {activeTab === 'My Goons' && (
+        <div style={{ width: '100%', margin: '0 auto', maxWidth: '600px' }}>
+          <MyGoons
+            goons={myGoons}
+            onRemove={onRemove}
+            updateWallet={updateWallet}
+            wallet={wallet}
+          />
         </div>
-      </div>
+      )}
       {/* makes it responsive */}
       <style>
         {`
@@ -507,6 +516,8 @@ function UserAccount({
           }
         `}
       </style>
+        </div>
+      </div>
     </div>
   );
 }

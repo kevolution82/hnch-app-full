@@ -21,20 +21,19 @@ const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 // when a post request is sent to /api/gemini-chat, run this function
 app.post('/api/gemini-chat', async (req, res) => {
-  // get the message from the request body
   const { message } = req.body;
   try {
-    // pick the gemini model to use
+    // system prompt for jersey wiseguy
+    const systemPrompt = "You are Big Sal, a friendly but tough guy from Jersey. Always answer with a Jersey accent, use slang, and keep it casual. Never sound like a robot or an AI.";
     const model = genAI.getGenerativeModel({ model: "models/gemini-1.5-pro-latest" });
-    // send the message to gemini and wait for a reply
-    const result = await model.generateContent(message);
-    // get the text of the reply
+    // send both the system prompt and the user message
+    const result = await model.generateContent([systemPrompt, message]);
     const text = result.response.text();
-    // send the reply back to the frontend
     res.json({ reply: text });
   } catch (error) {
-    // if something goes wrong, send the error message
-    res.status(500).json({ error: error.message });
+    console.error("Gemini error:", error);
+    // send the full error to the frontend for now (for debugging)
+    res.status(500).json({ error: error, message: error.message });
   }
 });
 
