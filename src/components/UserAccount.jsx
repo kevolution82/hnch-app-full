@@ -7,6 +7,7 @@ const defaultAvatar = 'https://via.placeholder.com/150?text=Avatar';
 const initialTabs = ['General Information', 'Messaging', 'My Goons'];
 
 const demoUserData = {
+  id: 1,
   fullName: 'Bobby DeLuca',
   username: 'coldplayfan82',
   email: 'bobby@mafiamail.com',
@@ -415,10 +416,17 @@ function UserAccount({
                             timestamp: new Date()
                           })
                         })
-                          .then(res => res.json())
+                          .then(res => {
+                            if (!res.ok) throw new Error('Network response was not ok');
+                            return res.json();
+                          })
                           .then(data => {
                             setMessages(data);
                             setMessageInput('');
+                          })
+                          .catch(err => {
+                            console.error('Error sending message:', err);
+                            alert('Failed to send message. See console for details.');
                           });
                       }}>
                         <input

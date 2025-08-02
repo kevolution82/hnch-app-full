@@ -15,6 +15,7 @@ import java.util.Map;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/messages")
 public class MessageController {
@@ -68,3 +69,4 @@ public class MessageController {
         return messageRepo.findByUserId(userId);
     }
 }
+
