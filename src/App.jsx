@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, Routes, Route, useLocation } from 'react-router-dom';
+import { Link, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Home from './components/Home';
 import About from './components/About';
 import Hire from './components/Hire';
@@ -26,6 +26,11 @@ function App() {
       .then(data => setApiMessage(data.message))
       .catch(err => console.error(err));
   }, []);
+
+function RequireAuth({ children }) {
+  const loggedInUser = localStorage.getItem('loggedInUser');
+  return loggedInUser ? children : <Navigate to="/login" replace />;
+}
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -115,18 +120,21 @@ const updateWallet = (amount) => {
           <Route path="/gigs" element={<Gigs userName={userName} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route
+            <Route
             path="/account"
             element={
-              <UserAccount
-                myGoons={myGoons}
-                onRemove={handleRemove}
-                updateWallet={updateWallet}
-                wallet={wallet}
-              />
+              <RequireAuth>
+                <UserAccount
+                  myGoons={myGoons}
+                  onRemove={handleRemove}
+                  updateWallet={updateWallet}
+                  wallet={wallet}
+                />
+              </RequireAuth>
             }
           />
-        </Routes>
+          </Routes>
+        <div className="footer-placeholder" />
       </main>
 
       <footer className="footer">
