@@ -44,7 +44,7 @@ const demoChats = [
     name: 'Petey No-Nose',
     messages: [
       { sender: 'Petey No-Nose',
-        audio: '/petey.mp3',
+        audio: '/petey.wav',
         text: "🔊 [Voice message]" }
     ],
   },
@@ -419,6 +419,12 @@ useEffect(() => {
                               }}
                             >
                               <strong>{msg.sender}:</strong> {msg.text}
+                              {msg.audio && (
+                                <audio controls style={{ display: 'block', marginTop: '8px' }}>
+                                  <source src={msg.audio} type="audio/wav" />
+                                  Your browser does not support this thing.
+                                </audio>
+                              )}
                             </span>
                           </div>
                         ))}
