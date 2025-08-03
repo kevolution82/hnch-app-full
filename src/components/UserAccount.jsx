@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './UserAccount.css';
 import MyGoons from './MyGoons';
+import ConfirmModal from './ConfirmModal'; 
 
 const defaultAvatar = 'https://via.placeholder.com/150?text=Avatar';
 
-const initialTabs = ['General Information', 'Messaging', 'My Goons'];
+const initialTabs = ['General Information', 'Messaging', 'My Goons', 'Logout'];
 
 const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
 
@@ -50,6 +52,8 @@ function UserAccount({
   wallet
 }) {
   
+  const [modal, setModal] = useState({ show: false, message: '' });
+  const navigate = useNavigate();
   const storedUser = JSON.parse(localStorage.getItem('userProfile') || '{}');
   const effectiveUserData =
     (storedUser && Object.keys(storedUser).length > 0 ? storedUser : userData) || {};
@@ -134,6 +138,21 @@ useEffect(() => {
         setModal({ show: true, message: 'Failed to delete message (ADMIN ONLY!).' });
       });
   };
+
+  const handleLogout = () => {
+    setModal({
+      show: true,
+      message: "Alright fine, you're logged out. Just don't talk about anything you've seen here. Got it?"
+      });
+  };
+
+  const handleModalConfirm = () => {
+  // this removes the user from localStorage
+  localStorage.removeItem('loggedInUser');
+  localStorage.removeItem('userProfile');
+  setModal({ show: false, message: '' });
+  navigate('/login', { replace: true });
+};
 
   // messaging tab logic
   const chatList = chats || [];
@@ -540,8 +559,35 @@ useEffect(() => {
           />
         </div>
       )}
+
+      {activeTab === 'Logout' && (
+            <div style={{ padding: '32px', textAlign: 'center' }}>
+              <button
+                style={{
+                  background: 'orange',
+                  color: '#222',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '12px 32px',
+                  fontWeight: 'bold',
+                  fontSize: '1.2em',
+                  cursor: 'pointer'
+                }}
+                onClick={handleLogout}
+              >
+                Log Out
+              </button>
+            </div>
+          )}
         </div>
       </section>
+      {modal.show && (
+        <ConfirmModal
+          message={modal.message}
+          onConfirm={handleModalConfirm}
+          alertOnly={true}
+        />
+      )}
     </main>
   );
 }
