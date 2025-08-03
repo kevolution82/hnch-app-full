@@ -75,6 +75,8 @@ function UserAccount({
   const [selectedChat, setSelectedChat] = useState(chats?.[0]?.id || null);
   const [messageInput, setMessageInput] = useState('');
   const [messages, setMessages] = useState([]);
+  const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+  const isAdmin = loggedInUser.role === 'ADMIN';
 
 useEffect(() => {
   if (activeTab === 'Messaging') {
@@ -124,11 +126,25 @@ useEffect(() => {
     // backend stuff would go here, i.e. save form data
   };
 
+  const handleDelete = (msgId) => {
+    fetch(`http://localhost:8080/api/messages/${msgId}?username=${loggedInUser.username}`, {
+      method: 'DELETE'
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Delete failed!');
+        setMessages(messages.filter(m => m.id !== msgId));
+      })
+      .catch(err => {
+        alert('Failed to delete message (ADMIN ONLY!).');
+      });
+  };
+
   // messaging tab logic
   const chatList = chats || [];
   const currentChat = chatList.find(chat => chat.id === selectedChat);
 
   return (
+  
   <div
     className="account-container"
     style={{
@@ -431,6 +447,23 @@ useEffect(() => {
                                   Your browser does not support this thing.
                                 </audio>
                               )}
+                              {/* admin delete button */}
+                              {isAdmin && (
+                                <button
+                                  style={{
+                                  marginLeft: '10px',
+                                  background: 'red',
+                                  color: '#fff',
+                                  border: 'none',
+                                  borderRadius: '4px',
+                                  padding: '2px 8px',
+                                  cursor: 'pointer'
+                               }}
+                                onClick={() => handleDelete(msg.id)}
+                              >
+                                Delete
+                              </button>
+                            )}
                             </span>
                           </div>
                         ))}
