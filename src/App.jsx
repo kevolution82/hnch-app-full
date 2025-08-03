@@ -25,7 +25,7 @@ function App() {
     fetch('http://localhost:3000/api/hello')
       .then(res => res.json())
       .then(data => setApiMessage(data.message))
-      .catch(err => console.error(err));
+      // .catch(err => console.error(err));
   }, []);
 
 function RequireAuth({ children }) {
@@ -76,7 +76,7 @@ const updateWallet = (amount) => {
           💸 <span className="wallet-amount">${wallet.toLocaleString()}</span>
         </div>
       )}
-
+    <header>
       <nav className="navbar">
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
@@ -102,6 +102,7 @@ const updateWallet = (amount) => {
           </div>
         )}
       </div>
+      </header>
 
       <main className="content">
         <Routes>

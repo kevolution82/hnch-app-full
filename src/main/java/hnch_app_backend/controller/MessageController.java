@@ -58,7 +58,7 @@ public class MessageController {
             }
         } catch (Exception e) {
             // log the error if needed
-            System.out.println("could not get ai reply: " + e.getMessage());
+            // System.out.println("could not get ai reply: " + e.getMessage());
         }
 
         Message aiReply = new Message();

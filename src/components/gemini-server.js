@@ -31,7 +31,7 @@ app.post('/api/gemini-chat', async (req, res) => {
     const text = result.response.text();
     res.json({ reply: text });
   } catch (error) {
-    console.error("Gemini error:", error);
+    // console.error("Gemini error:", error);
     // send the full error to the frontend for now (for debugging)
     res.status(500).json({ error: error, message: error.message });
   }
@@ -40,5 +40,5 @@ app.post('/api/gemini-chat', async (req, res) => {
 // start the server on port 4000 and print a message
 const PORT = 4000;
 app.listen(PORT, () => {
-  console.log(`Gemini AI server running on port ${PORT}`);
+  // console.log(`Gemini AI server running on port ${PORT}`);
 });

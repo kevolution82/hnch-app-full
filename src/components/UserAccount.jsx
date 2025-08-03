@@ -135,7 +135,7 @@ useEffect(() => {
         setMessages(messages.filter(m => m.id !== msgId));
       })
       .catch(err => {
-        alert('Failed to delete message (ADMIN ONLY!).');
+        setModal({ show: true, message: 'Failed to delete message (ADMIN ONLY!).' });
       });
   };
 
@@ -145,7 +145,7 @@ useEffect(() => {
 
   return (
   
-  <div
+  <main
     className="account-container"
     style={{
       minHeight: '80vh',
@@ -158,7 +158,7 @@ useEffect(() => {
       fontFamily: 'Roboto, Arial, Helvetica, sans-serif' 
     }}
   >
-      <div
+      <section
         style={{
           display: 'flex',
           flexDirection: 'row',
@@ -493,8 +493,8 @@ useEffect(() => {
                             setMessageInput('');
                           })
                           .catch(err => {
-                            console.error('Error sending message:', err);
-                            alert('Failed to send message. See console for details.');
+                            // console.error('Error sending message:', err);
+                            setModal({ show: true, message: 'Failed to send message. See console for details.' });
                           });
                       }}>
                         <input
@@ -545,8 +545,8 @@ useEffect(() => {
         </div>
       )}
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
 

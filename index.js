@@ -6,7 +6,7 @@ const { GoogleGenAI } = require("@google/genai");
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 if (!GEMINI_API_KEY) {
-  console.error("API key not found. Please set the GEMINI_API_KEY environment variable.");
+  // console.error("API key not found. Please set the GEMINI_API_KEY environment variable.");
   process.exit(1);
 }
 
@@ -24,9 +24,9 @@ async function run() {
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    console.log(text);
+    // console.log(text);
   } catch (error) {
-    console.error("An error occurred:", error);
+    // console.error("An error occurred:", error);
   }
 }
 
