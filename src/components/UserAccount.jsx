@@ -68,7 +68,14 @@ function UserAccount({
     avatar: effectiveUserData.avatar || defaultAvatar,
   });
 
-  const [activeTab, setActiveTab] = useState(initialTabs[0]);
+const [activeTab, setActiveTab] = useState(() => {
+  return localStorage.getItem('accountActiveTab') || initialTabs[0];
+});
+
+  useEffect(() => {
+    localStorage.setItem('accountActiveTab', activeTab);
+  }, [activeTab]);
+  
   const [avatarFile, setAvatarFile] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [errors, setErrors] = useState({});
