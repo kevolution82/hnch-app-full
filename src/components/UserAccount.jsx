@@ -6,16 +6,7 @@ const defaultAvatar = 'https://via.placeholder.com/150?text=Avatar';
 
 const initialTabs = ['General Information', 'Messaging', 'My Goons'];
 
-const demoUserData = {
-  id: 1,
-  fullName: 'Bobby DeLuca',
-  username: 'coldplayfan82',
-  email: 'bobby@mafiamail.com',
-  organization: 'None',
-  aliases: 'Robert, Bobby D',
-  birthdate: '05/15/1982',
-  avatar: defaultAvatar,
-};
+const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
 
 const demoChats = [
   {
@@ -34,7 +25,7 @@ const demoChats = [
   },
   {
     id: 'grandma',
-    name: 'Grandma',
+    name: 'Grandma ❤️',
     messages: [
       { sender: 'Grandma', text: "Hi honey, can you help me with the remote again? I can't find the Netflix button. Love you!" }
     ],
@@ -51,21 +42,26 @@ const demoChats = [
 ];
 
 function UserAccount({
-  userData = demoUserData,
+  userData,
   chats = demoChats,
   myGoons = [],
   onRemove,
   updateWallet,
   wallet
 }) {
+  
+  const storedUser = JSON.parse(localStorage.getItem('userProfile') || '{}');
+  const effectiveUserData =
+    (storedUser && Object.keys(storedUser).length > 0 ? storedUser : userData) || {};
+
   const [form, setForm] = useState({
-    fullName: userData?.fullName || '',
-    username: userData?.username || '',
-    email: userData?.email || '',
-    organization: userData?.organization || '',
-    aliases: userData?.aliases || '',
-    birthdate: userData?.birthdate || '',
-    avatar: userData?.avatar || defaultAvatar,
+    fullName: effectiveUserData.fullName || '',
+    username: effectiveUserData.username || '',
+    email: effectiveUserData.email || '',
+    organization: effectiveUserData.organization || '',
+    aliases: effectiveUserData.aliases || '',
+    birthdate: effectiveUserData.birthdate || '',
+    avatar: effectiveUserData.avatar || defaultAvatar,
   });
 
   const [activeTab, setActiveTab] = useState(initialTabs[0]);
