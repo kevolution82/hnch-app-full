@@ -15,6 +15,8 @@ function Login() {
     const user = users.find(u => u.username === username && u.password === password);
     if (user) {
       localStorage.setItem('loggedInUser', JSON.stringify(user));
+      // this should load the user's saved info from localStorage to the account and display when you login
+      localStorage.setItem('userProfile', JSON.stringify(user));
       navigate('/account');
     } else {
       setError('Invalid username or password');
