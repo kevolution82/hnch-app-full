@@ -10,18 +10,22 @@ function Login() {
 
   // handles login form submission and checks credentials against the localStorage
   const handleSubmit = (e) => {
-    e.preventDefault();
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const user = users.find(u => u.username === username && u.password === password);
-    if (user) {
-      localStorage.setItem('loggedInUser', JSON.stringify(user));
-      // this should load the user's saved info from localStorage to the account and display when you login
-      localStorage.setItem('userProfile', JSON.stringify(user));
-      navigate('/account');
-    } else {
-      setError('Invalid username or password');
-    }
-  };
+  e.preventDefault();
+  const users = JSON.parse(localStorage.getItem('users') || '[]');
+  const user = users.find(u => u.username === username && u.password === password);
+  if (user) {
+    localStorage.setItem('loggedInUser', JSON.stringify(user));
+    // saves the avatar if it already exists
+    const existingProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+    const avatar = existingProfile.username === user.username && existingProfile.avatar
+      ? existingProfile.avatar
+      : 'https://via.placeholder.com/150?text=Avatar';
+    localStorage.setItem('userProfile', JSON.stringify({ ...user, avatar }));
+    navigate('/account');
+  } else {
+    setError('Invalid username or password');
+  }
+};
 
   return (
     <div className="login-container">

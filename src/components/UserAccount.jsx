@@ -75,7 +75,7 @@ const [activeTab, setActiveTab] = useState(() => {
   useEffect(() => {
     localStorage.setItem('accountActiveTab', activeTab);
   }, [activeTab]);
-  
+
   const [avatarFile, setAvatarFile] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [errors, setErrors] = useState({});
@@ -95,16 +95,22 @@ useEffect(() => {
 
   // does the avatar upload
   const handleAvatarChange = e => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = ev => {
-        setForm({ ...form, avatar: ev.target.result });
-        setAvatarFile(file);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      setForm(prev => {
+        const updated = { ...prev, avatar: ev.target.result };
+        // saves the avatar to localStorage
+        const stored = JSON.parse(localStorage.getItem('userProfile') || '{}');
+        localStorage.setItem('userProfile', JSON.stringify({ ...stored, avatar: ev.target.result }));
+        return updated;
+      });
+      setAvatarFile(file);
+    };
+    reader.readAsDataURL(file);
+  }
+};
 
   // handles field changes
   const handleChange = e => {

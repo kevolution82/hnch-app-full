@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import './components/WalletDisplay.css';
 import Home from './components/Home';
 import About from './components/About';
 import Hire from './components/Hire';
@@ -70,12 +71,22 @@ const updateWallet = (amount) => {
         </div>
       )}
 
-      {/* only show the wallet if someone is logged in */}
-      {localStorage.getItem('loggedInUser') && (
-        <div className="wallet-ui">
-          💸 <span className="wallet-amount">${wallet.toLocaleString()}</span>
-        </div>
+      {/* this shows the wallet and a smaller circular version of their avatar */}
+    {localStorage.getItem('loggedInUser') && (() => {
+      const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+        return (
+      <div className="wallet-ui">
+        {userProfile.avatar && (
+        <img
+          src={userProfile.avatar}
+          alt="Avatar"
+          className="wallet-avatar"
+        />
       )}
+      💸 <span className="wallet-amount">${wallet.toLocaleString()}</span>
+    </div>
+  );
+})()}
     <header>
       <nav className="navbar">
         <Link to="/">Home</Link>
