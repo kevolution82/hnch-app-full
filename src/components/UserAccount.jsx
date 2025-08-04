@@ -162,7 +162,6 @@ useEffect(() => {
   const handleModalConfirm = () => {
   // this removes the user from localStorage
   localStorage.removeItem('loggedInUser');
-  localStorage.removeItem('userProfile');
   setModal({ show: false, message: '' });
   navigate('/login', { replace: true });
 };

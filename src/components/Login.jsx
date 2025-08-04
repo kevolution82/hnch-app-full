@@ -15,12 +15,17 @@ function Login() {
   const user = users.find(u => u.username === username && u.password === password);
   if (user) {
     localStorage.setItem('loggedInUser', JSON.stringify(user));
-    // saves the avatar if it already exists
+    // it only updates fields that are missing and saves the avatar if it exists
     const existingProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
-    const avatar = existingProfile.username === user.username && existingProfile.avatar
-      ? existingProfile.avatar
-      : 'https://via.placeholder.com/150?text=Avatar';
-    localStorage.setItem('userProfile', JSON.stringify({ ...user, avatar }));
+    const avatar =
+      existingProfile.username === user.username && existingProfile.avatar
+        ? existingProfile.avatar
+        : user.avatar || 'https://via.placeholder.com/150?text=Avatar';
+    // merges all existing profile fields but updates with latest user info and avatar
+    localStorage.setItem(
+      'userProfile',
+      JSON.stringify({ ...existingProfile, ...user, avatar })
+    );
     navigate('/account');
   } else {
     setError('Invalid username or password');
