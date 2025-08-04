@@ -24,3 +24,9 @@ dist-ssr
 *.sw?
 app.env
 app.env
+<<<<<<< HEAD
+=======
+
+# ignore spring boot application properties (contains secrets)
+src/main/resources/application.propertiesapplication.properties
+>>>>>>> 77a225b (stopped tracking application.properties & fixed MySQL issue not returning a table)

@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "messages")
 public class Message {
 
     @Id
@@ -26,14 +27,14 @@ public class Message {
     // when the message was sent
     private LocalDateTime timestamp;
     // which character is used for the message
-    private String character;
+    private String characterName;
 
-    public String getCharacter() {
-    return character;
+    public String getCharacterName() {
+    return characterName;
     }
 
-    public void setCharacter(String character) {
-    this.character = character;
+    public void setCharacterName(String characterName) {
+    this.characterName = characterName;
     }
 
     public Message() {}

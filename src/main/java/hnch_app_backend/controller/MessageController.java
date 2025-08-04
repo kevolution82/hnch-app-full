@@ -42,7 +42,7 @@ public class MessageController {
     if (existing.isEmpty()) {
         Message defaultMsg = new Message();
         defaultMsg.setUserId(userId);
-        defaultMsg.setCharacter(character);
+        defaultMsg.setCharacterName(character);
         defaultMsg.setSender(character);
         switch (character.trim().toLowerCase()) {
             case "sal":
@@ -67,7 +67,7 @@ public class MessageController {
     // save the user's message
     Message userMsg = new Message();
     userMsg.setUserId(userId);
-    userMsg.setCharacter(character);
+    userMsg.setCharacterName(character);
     userMsg.setText(userMessage);
     userMsg.setSender("user");
     userMsg.setTimestamp(LocalDateTime.now());
@@ -96,7 +96,7 @@ public class MessageController {
 
     Message aiReply = new Message();
     aiReply.setUserId(userId);
-    aiReply.setCharacter(character);
+    aiReply.setCharacterName(character);
     aiReply.setText(aiReplyText);
     aiReply.setSender(character);
     aiReply.setTimestamp(LocalDateTime.now());
