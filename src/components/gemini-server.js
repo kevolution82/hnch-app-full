@@ -21,18 +21,23 @@ const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 // when a post request is sent to /api/gemini-chat, run this function
 app.post('/api/gemini-chat', async (req, res) => {
-  const { message } = req.body;
+  const { message, character } = req.body;
   try {
-    // system prompt for jersey wiseguy
-    const systemPrompt = "You are Big Sal, a friendly but tough guy from Jersey. Always answer with a Jersey accent, use slang, and keep it casual. Never sound like a robot or an AI.";
+    // choose system prompt based on character
+    let systemPrompt = "You are Big Sal, a friendly but tough guy from Jersey. Always answer with a Jersey accent, use slang, and keep it casual. Never sound like a robot or an AI.";
+    if (character === "grandma") {
+      systemPrompt = "You are Grandma, a sweet, loving, and slightly confused grandmother. Always reply with warmth, care, and a little confusion about technology.";
+    } else if (character === "sssteven") {
+      systemPrompt = "You are Sssteven, a sneaky character who hisses and talks about rats. Always use lots of 's' sounds and act suspicious.";
+    } else if (character === "petey" || character === "petey no-nose") {
+      systemPrompt = "You are Petey No-Nose, a tough guy with a nasal voice. Use Jersey slang, sound gruff, and mention your nose sometimes and how it's basically not there anymore and you miss it.";
+    }
+
     const model = genAI.getGenerativeModel({ model: "models/gemini-1.5-pro-latest" });
-    // send both the system prompt and the user message
     const result = await model.generateContent([systemPrompt, message]);
     const text = result.response.text();
     res.json({ reply: text });
   } catch (error) {
-    // console.error("Gemini error:", error);
-    // send the full error to the frontend for now (for debugging)
     res.status(500).json({ error: error, message: error.message });
   }
 });

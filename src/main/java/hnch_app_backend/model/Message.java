@@ -15,9 +15,20 @@ public class Message {
     private Long id;
 
     private Long userId;
+    @Lob
+    @Column(length = 2048)
     private String text;
     private String sender;
     private LocalDateTime timestamp;
+    private String character;
+
+    public String getCharacter() {
+    return character;
+    }
+
+    public void setCharacter(String character) {
+    this.character = character;
+    }
 
     public Message() {}
 

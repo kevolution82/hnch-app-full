@@ -15,30 +15,28 @@ const demoChats = [
     id: 'sal',
     name: 'Big Sal',
     messages: [
-      { sender: 'Big Sal', text: "Ay, I saw your gig post. You need muscle or you need brains? Either way, I'm your guy. Let's talk business." }
+      { sender: 'sal', text: "Ay, I saw your gig post. You need muscle or you need brains? Either way, I'm your guy. Let's talk business." }
     ],
   },
   {
     id: 'sssteven',
     name: 'Sssteven',
     messages: [
-      { sender: 'Sssteven', text: "Hisss... I sssaw your gig. Doesss it involve ratsss? I can handle ratsss... for a price." }
+      { sender: 'sssteven', text: "Hisss... I sssaw your gig. Doesss it involve ratsss? I can handle ratsss... for a price." }
     ],
   },
   {
     id: 'grandma',
     name: 'Grandma ❤️',
     messages: [
-      { sender: 'Grandma', text: "Hi honey, can you help me with the remote again? I can't find the Netflix button. Love you!" }
+      { sender: 'grandma', text: "Hi honey, can you help me with the remote again? I can't find the Netflix button. Love you!" }
     ],
   },
   {
-    id: 'voice',
+    id: 'petey no-nose',
     name: 'Petey No-Nose',
     messages: [
-      { sender: 'Petey No-Nose',
-        audio: '/petey.wav',
-        text: "🔊 [Voice message]" }
+      { sender: 'petey no-nose', audio: '/petey.wav', text: "🔊 [Voice message]" }
     ],
   },
 ];
@@ -112,6 +110,40 @@ useEffect(() => {
   }
 };
 
+  const handleSendMessage = async (e) => {
+  e.preventDefault();
+  if (!messageInput.trim() || !selectedChat) return;
+
+  // sends message to the backend so the ai can reply for all characters
+  try {
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+    const userId = loggedInUser.id || 1;
+    // this finds the chat object for the selected chat
+    const chat = chats.find(c => c.id === selectedChat);
+    const character = chat ? chat.id : selectedChat;
+
+    const res = await fetch('http://localhost:8080/api/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId,
+        text: messageInput,
+        character,
+      }),
+    });
+
+    if (res.ok) {
+      const updatedMessages = await res.json();
+      setMessages(updatedMessages);
+      setMessageInput('');
+    } else {
+      setModal({ show: true, message: 'Failed to send message.' });
+    }
+  } catch (err) {
+    setModal({ show: true, message: 'Failed to send message.' });
+  }
+};
+
   // handles field changes
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -160,10 +192,14 @@ useEffect(() => {
   };
 
   const handleModalConfirm = () => {
-  // this removes the user from localStorage
-  localStorage.removeItem('loggedInUser');
-  setModal({ show: false, message: '' });
-  navigate('/login', { replace: true });
+  // this removes the user from localStorage & only logs the user out if the modal gets the logout message
+  if (modal.message.startsWith("Alright fine, you're logged out. Just don't talk about anything you've seen here. Got it?")) {
+    localStorage.removeItem('loggedInUser');
+    setModal({ show: false, message: '' });
+    navigate('/login', { replace: true });
+  } else {
+    setModal({ show: false, message: '' });
+  }
 };
 
   // messaging tab logic
@@ -496,34 +532,8 @@ useEffect(() => {
                         ))}
                       </div>
                       {/* message input */}
-                      <form style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }} onSubmit={e => {
-                        e.preventDefault();
-                        if (!messageInput.trim()) return;
-                        fetch('http://localhost:8080/api/messages', {
-                          method: 'POST',
-                          headers: {
-                            'Content-Type': 'application/json'
-                          },
-                          body: JSON.stringify({
-                            userId: userData.id,
-                            text: messageInput,
-                            sender: 'user',
-                            timestamp: new Date()
-                          })
-                        })
-                          .then(res => {
-                            if (!res.ok) throw new Error('Network response was not ok');
-                            return res.json();
-                          })
-                          .then(data => {
-                            setMessages(data);
-                            setMessageInput('');
-                          })
-                          .catch(err => {
-                            // console.error('Error sending message:', err);
-                            setModal({ show: true, message: 'Failed to send message. See console for details.' });
-                          });
-                      }}>
+                      <form style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }} onSubmit={handleSendMessage}
+                      >
                         <input
                           type="text"
                           placeholder="Type a message..."

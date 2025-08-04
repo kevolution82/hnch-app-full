@@ -10,3 +10,13 @@ Currently, two official plugins are available:
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+## Manual Testing Results
+
+## Debugging Results
+
+## Jest Testing in React App Results
+- ran 'npm test' to execute all Jest tests
+- tested helper functions (fee calculation, snitch detection, career experience)
+- tested UserAccount component for message deletion (success, failure, networker error)
+- all tests passed successfully

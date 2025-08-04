@@ -26,57 +26,91 @@ public class MessageController {
 
     @Autowired
     private MessageRepository messageRepo;
-    private final UserRepository userRepo;
 
-    public MessageController(MessageRepository messageRepo, UserRepository userRepo) {
-        this.messageRepo = messageRepo;
-        this.userRepo = userRepo;
-    }
+    @Autowired
+    private UserRepository userRepo;
+
     // send a message and get ai reply from gemini
     @PostMapping
-    public List<Message> sendMessage(@RequestBody Message msg) {
-        msg.setSender("user");
-        msg.setTimestamp(LocalDateTime.now());
-        messageRepo.save(msg);
+    public List<Message> sendMessage(@RequestBody Map<String, Object> msg) {
+    String userMessage = (String) msg.get("text");
+    String character = (String) msg.get("character");
+    Long userId = Long.valueOf(msg.get("userId").toString());
 
-        // talk to the gemini ai server for a reply
-        String userMessage = msg.getText();
-        String geminiApiUrl = "http://localhost:4000/api/gemini-chat";
-        String aiReplyText = "sorry, i got nothin' right now.";
+    // get messages for this user and this character
+    List<Message> existing = messageRepo.findByUserIdAndCharacter(userId, character);
+    if (existing.isEmpty()) {
+        Message defaultMsg = new Message();
+        defaultMsg.setUserId(userId);
+        defaultMsg.setCharacter(character);
+        defaultMsg.setSender(character);
+        switch (character.trim().toLowerCase()) {
+            case "sal":
+                defaultMsg.setText("Ay, I saw your gig post. You need muscle or you need brains? Either way, I'm your guy. Let's talk business.");
+                break;
+            case "sssteven":
+                defaultMsg.setText("Hisss... I sssaw your gig. Doesss it involve ratsss? I can handle ratsss... for a price.");
+                break;
+            case "grandma":
+                defaultMsg.setText("Hi honey, can you help me with the remote again? I can't find the Netflix button. Love you!");
+                break;
+            case "petey no-nose":
+                defaultMsg.setText("🔊 [Voice message]");
+                break;
+            default:
+        defaultMsg.setText("Hello!");
+    }
+        defaultMsg.setTimestamp(LocalDateTime.now());
+        messageRepo.save(defaultMsg);
+    }
 
-        try {
-            RestTemplate restTemplate = new RestTemplate();
-            Map<String, String> request = new HashMap<>();
-            request.put("message", userMessage);
+    // save the user's message
+    Message userMsg = new Message();
+    userMsg.setUserId(userId);
+    userMsg.setCharacter(character);
+    userMsg.setText(userMessage);
+    userMsg.setSender("user");
+    userMsg.setTimestamp(LocalDateTime.now());
+    messageRepo.save(userMsg);
 
-            ResponseEntity<Map> response = restTemplate.postForEntity(geminiApiUrl, request, Map.class);
-            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-                Object replyObj = response.getBody().get("reply");
-                if (replyObj != null) {
-                    aiReplyText = replyObj.toString();
-                }
+    // talk to the gemini ai server for a reply
+    String geminiApiUrl = "http://localhost:4000/api/gemini-chat";
+    String aiReplyText = "sorry, i got nothin' right now.";
+
+    try {
+        RestTemplate restTemplate = new RestTemplate();
+        Map<String, String> request = new HashMap<>();
+        request.put("message", userMessage);
+        request.put("character", getCharacterId(character));
+
+        ResponseEntity<Map> response = restTemplate.postForEntity(geminiApiUrl, request, Map.class);
+        if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+            Object replyObj = response.getBody().get("reply");
+            if (replyObj != null) {
+                aiReplyText = replyObj.toString();
             }
-        } catch (Exception e) {
-            // log the error if needed
-            // System.out.println("could not get ai reply: " + e.getMessage());
         }
+    } catch (Exception e) {
+        e.printStackTrace();
+           }
 
-        Message aiReply = new Message();
-        aiReply.setUserId(msg.getUserId());
-        aiReply.setText(aiReplyText);
-        aiReply.setSender("Big Sal");
-        aiReply.setTimestamp(LocalDateTime.now());
-        messageRepo.save(aiReply);
+    Message aiReply = new Message();
+    aiReply.setUserId(userId);
+    aiReply.setCharacter(character);
+    aiReply.setText(aiReplyText);
+    aiReply.setSender(character);
+    aiReply.setTimestamp(LocalDateTime.now());
+    messageRepo.save(aiReply);
 
-        // return all messages for this user
-        return messageRepo.findByUserId(msg.getUserId());
+    // return all messages for this user and character
+    return messageRepo.findByUserIdAndCharacter(userId, character);
     }
 
     // get all messages for a user
-    @GetMapping("/{userId}")
-    public List<Message> getMessages(@PathVariable Long userId) {
-        return messageRepo.findByUserId(userId);
-    }
+    @GetMapping("/{userId}/{character}")
+    public List<Message> getMessages(@PathVariable Long userId, @PathVariable String character) {
+    return messageRepo.findByUserIdAndCharacter(userId, character);
+}
 
     // update a message
     @PutMapping("/{id}")
@@ -98,5 +132,21 @@ public class MessageController {
         messageRepo.deleteById(id);
         return ResponseEntity.ok().build();
     }
-}
 
+    // this helper turns the display name into the id for gemini
+    private String getCharacterId(String character) {
+    if (character == null) return "sal";
+    switch (character.trim().toLowerCase()) {
+        case "sal":
+            return "sal";
+        case "sssteven":
+            return "sssteven";
+        case "grandma":
+            return "grandma";
+        case "petey no-nose":
+            return "petey";
+        default:
+            return "sal";
+    }
+}
+}

@@ -23,10 +23,10 @@ function App() {
   // API connection to fetch a message from the server
   const [apiMessage, setApiMessage] = useState('');
   useEffect(() => {
-    fetch('http://localhost:3000/api/hello')
-      .then(res => res.json())
-      .then(data => setApiMessage(data.message))
-      // .catch(err => console.error(err));
+    // fetch('http://localhost:3000/api/hello')
+    //  .then(res => res.json())
+    //  .then(data => setApiMessage(data.message))
+    // .catch(err => console.error(err));
   }, []);
 
 function RequireAuth({ children }) {
