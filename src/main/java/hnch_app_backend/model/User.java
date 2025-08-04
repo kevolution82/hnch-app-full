@@ -14,6 +14,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // stores user's username, password, email, and role
     private String username;
     private String password;
     private String email;

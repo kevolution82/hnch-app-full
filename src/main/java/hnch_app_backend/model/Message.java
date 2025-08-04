@@ -14,12 +14,18 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // this links the message to a user
     private Long userId;
     @Lob
+    // allows longer text for the message
     @Column(length = 2048)
+    // this is the message content
     private String text;
+    // shows who sent the message
     private String sender;
+    // when the message was sent
     private LocalDateTime timestamp;
+    // which character is used for the message
     private String character;
 
     public String getCharacter() {

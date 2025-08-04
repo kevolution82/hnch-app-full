@@ -12,11 +12,13 @@ function Login() {
   const handleSubmit = (e) => {
   e.preventDefault();
   const users = JSON.parse(localStorage.getItem('users') || '[]');
+  // this finds a user with matching username and password
   const user = users.find(u => u.username === username && u.password === password);
   if (user) {
     localStorage.setItem('loggedInUser', JSON.stringify(user));
     // it only updates fields that are missing and saves the avatar if it exists
     const existingProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+    // if the profile matches and has an avatar, use it, otherwise use the default
     const avatar =
       existingProfile.username === user.username && existingProfile.avatar
         ? existingProfile.avatar

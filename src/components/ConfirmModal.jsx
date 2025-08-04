@@ -1,6 +1,9 @@
 import React from 'react';
 import './DangerModal.css';
 
+// this is a simple modal for showing messages or asking for confirmation
+// if alertOnly is true, only the ok button shows
+
 function ConfirmModal({ message, onConfirm, onCancel, confirmText = 'Yes', cancelText = 'Cancel', alertOnly = false }) {
   return (
     <div className="modal-overlay">
