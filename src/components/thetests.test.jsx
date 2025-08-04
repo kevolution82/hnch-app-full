@@ -54,48 +54,61 @@ describe('useraccount handledelete', () => {
     );
   }
 
-  it('removes the message from the screen when delete works', async () => {
-    // mock fetch to return ok
-    global.fetch.mockResolvedValueOnce({ ok: true });
-    setup();
+it('removes the message from the screen when delete works', async () => {
+  // mock fetch for loading messages
+  global.fetch
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => [
+        { id: 101, sender: 'Big Sal', text: 'Hello' },
+        { id: 102, sender: 'admin', text: 'Hi' },
+      ],
+    })
+    // mock fetch for delete
+    .mockResolvedValueOnce({ ok: true });
 
-    // find and click the delete button
-    const deleteButtons = await screen.findAllByText('Delete');
-    expect(deleteButtons.length).toBeGreaterThan(0);
+  setup();
 
-    fireEvent.click(deleteButtons[0]);
+  // Wait for the message to appear
+  await screen.findByText('Hello');
 
-    // wait for the message to be gone from the screen
-    await waitFor(() => {
-      expect(screen.queryByText('Hola')).not.toBeInTheDocument();
-    });
-  });
+  // find and click the delete button
+  const deleteButtons = await screen.findAllByText('Delete');
+  expect(deleteButtons.length).toBeGreaterThan(0);
 
-  it('shows an error modal if deleting a message fails', async () => {
-    // mock fetch to return not ok
-    global.fetch.mockResolvedValueOnce({ ok: false });
-    setup();
+  fireEvent.click(deleteButtons[0]);
 
-    const deleteButtons = await screen.findAllByText('Delete');
-    fireEvent.click(deleteButtons[0]);
-
-    // wait for the error modal to show up
-    await waitFor(() => {
-      expect(screen.getByTestId('modal')).toHaveTextContent('Failed to delete message');
-    });
-  });
-
-  it('shows an error modal if there is a network error', async () => {
-    // mock fetch to throw an error
-    global.fetch.mockRejectedValueOnce(new Error('Network error'));
-    setup();
-
-    const deleteButtons = await screen.findAllByText('Delete');
-    fireEvent.click(deleteButtons[0]);
-
-    // wait for the error modal to show up
-    await waitFor(() => {
-      expect(screen.getByTestId('modal')).toHaveTextContent('Failed to delete message');
-    });
+  // wait for the message to be gone from the screen
+  await waitFor(() => {
+    expect(screen.queryByText('Hello')).not.toBeInTheDocument();
   });
 });
+
+it('shows an error modal if there is a network error', async () => {
+  // mock fetch for loading messages
+  global.fetch
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => [
+        { id: 101, sender: 'Big Sal', text: 'Hello' },
+        { id: 102, sender: 'admin', text: 'Hi' },
+      ],
+    })
+    // mock fetch for delete (this one throws)
+    .mockRejectedValueOnce(new Error('Network error'));
+
+  setup();
+
+  // Wait for the message to appear
+  await screen.findByText('Hello');
+
+  const deleteButtons = await screen.findAllByText('Delete');
+  fireEvent.click(deleteButtons[0]);
+
+  // wait for the error modal to show up
+  await waitFor(() => {
+    expect(screen.getByTestId('modal')).toHaveTextContent('Failed to delete message');
+  });
+});
+}
+);

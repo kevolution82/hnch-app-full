@@ -2,14 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './UserAccount.css';
 import MyGoons from './MyGoons';
-import ConfirmModal from './ConfirmModal'; 
+import ConfirmModal from './ConfirmModal';
+import EditButton from './EditButton';
 
 const defaultAvatar = 'https://static.wixstatic.com/media/7a4abc_a01c97c757434c33b4c1b7777e4a4934~mv2.png';
-
 const initialTabs = ['General Information', 'Messaging', 'My Goons', 'Logout'];
-
-const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
-
 const demoChats = [
   {
     id: 'sal',
@@ -41,6 +38,19 @@ const demoChats = [
   },
 ];
 
+function getInitialProfile(userData) {
+  const stored = JSON.parse(localStorage.getItem('userProfile') || '{}');
+  return {
+    fullName: stored.fullName || userData?.fullName || '',
+    username: stored.username || userData?.username || '',
+    email: stored.email || userData?.email || '',
+    organization: stored.organization || userData?.organization || '',
+    aliases: stored.aliases || userData?.aliases || '',
+    birthdate: stored.birthdate || userData?.birthdate || '',
+    avatar: stored.avatar || userData?.avatar || defaultAvatar,
+  };
+}
+
 function UserAccount({
   userData,
   chats = demoChats,
@@ -49,58 +59,47 @@ function UserAccount({
   updateWallet,
   wallet
 }) {
-  
   const [modal, setModal] = useState({ show: false, message: '' });
   const navigate = useNavigate();
-  const storedUser = JSON.parse(localStorage.getItem('userProfile') || '{}');
-  const effectiveUserData =
-    (storedUser && Object.keys(storedUser).length > 0 ? storedUser : userData) || {};
-
-  const [form, setForm] = useState({
-    fullName: effectiveUserData.fullName || '',
-    username: effectiveUserData.username || '',
-    email: effectiveUserData.email || '',
-    organization: effectiveUserData.organization || '',
-    aliases: effectiveUserData.aliases || '',
-    birthdate: effectiveUserData.birthdate || '',
-    avatar: effectiveUserData.avatar || defaultAvatar,
-  });
-
-const [activeTab, setActiveTab] = useState(() => {
-  return localStorage.getItem('accountActiveTab') || initialTabs[0];
-});
-
-  useEffect(() => {
-    localStorage.setItem('accountActiveTab', activeTab);
-  }, [activeTab]);
-
-  const [avatarFile, setAvatarFile] = useState(null);
   const [editMode, setEditMode] = useState(false);
+
+  // only initialize from localStorage/userData ONCE!!
+  const [form, setForm] = useState(() => getInitialProfile(userData));
+  const [activeTab, setActiveTab] = useState(() =>
+  localStorage.getItem('accountActiveTab') || initialTabs[0]
+);
+  const [avatarFile, setAvatarFile] = useState(null);
   const [errors, setErrors] = useState({});
   const [selectedChat, setSelectedChat] = useState(chats?.[0]?.id || null);
   const [messageInput, setMessageInput] = useState('');
   const [messages, setMessages] = useState([]);
-  const isAdmin = loggedInUser.role === 'ADMIN';
 
+  // save active tab to localStorage
+  useEffect(() => {
+    localStorage.setItem('accountActiveTab', activeTab);
+  }, [activeTab]);
+
+  // load messages for selected chat
 useEffect(() => {
-  if (activeTab === 'Messaging' && selectedChat) {
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
-    const userId = loggedInUser.id || 1;
-    fetch(`http://localhost:8080/api/messages/${userId}/${selectedChat}`)
-      .then(res => res.ok ? res.json() : [])
-      .then(data => setMessages(data || []));
-  }
+  if (activeTab !== 'Messaging' || !selectedChat) return;
+
+  const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+  const userId = loggedInUser.id || 1;
+  fetch(`http://localhost:8080/api/messages/${userId}/${selectedChat}`)
+    .then(res => res.ok ? res.json() : [])
+    .then(data => setMessages(data))
+    .catch(() => setMessages([]));
 }, [activeTab, selectedChat]);
 
   // does the avatar upload
-  const handleAvatarChange = e => {
+const handleAvatarChange = e => {
   const file = e.target.files[0];
   if (file) {
     const reader = new FileReader();
     reader.onload = ev => {
       setForm(prev => {
         const updated = { ...prev, avatar: ev.target.result };
-        // saves the avatar to localStorage
+        // save avatar to localStorage immediately
         const stored = JSON.parse(localStorage.getItem('userProfile') || '{}');
         localStorage.setItem('userProfile', JSON.stringify({ ...stored, avatar: ev.target.result }));
         return updated;
@@ -111,43 +110,43 @@ useEffect(() => {
   }
 };
 
-const handleSendMessage = async (e) => {
-  e.preventDefault();
-  if (!messageInput.trim() || !selectedChat) return;
+  // handles field changes
+  const handleChange = e => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  try {
+  // send message
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (!messageInput.trim() || !selectedChat) return;
+
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
     const userId = loggedInUser.id || 1;
     const chat = chats.find(c => c.id === selectedChat);
     const character = chat ? chat.id : selectedChat;
 
-    const res = await fetch('http://localhost:8080/api/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        userId,
-        text: messageInput,
-        character,
-      }),
-    });
+    try {
+      const res = await fetch('http://localhost:8080/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId,
+          text: messageInput,
+          character,
+        }),
+      });
 
-    if (res.ok) {
-      // this always reloads messages after sending
-      const response = await fetch(`http://localhost:8080/api/messages/${userId}/${character}`);
-      const updatedMessages = response.ok ? await response.json() : [];
-      setMessages(updatedMessages);
-      setMessageInput('');
-    } else {
+      if (res.ok) {
+        const response = await fetch(`http://localhost:8080/api/messages/${userId}/${character}`);
+        const updatedMessages = response.ok ? await response.json() : [];
+        setMessages(updatedMessages);
+        setMessageInput('');
+      } else {
+        setModal({ show: true, message: 'Failed to send message.' });
+      }
+    } catch (err) {
       setModal({ show: true, message: 'Failed to send message.' });
     }
-  } catch (err) {
-    setModal({ show: true, message: 'Failed to send message.' });
-  }
-};
-
-  // handles field changes
-  const handleChange = e => {
-    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   // validate fields
@@ -162,17 +161,35 @@ const handleSendMessage = async (e) => {
     return newErrors;
   };
 
+  // edit mode
+  const handleEdit = () => {
+    setEditMode(true);
+    setErrors({});
+  };
+
   // save edit changes
   const handleSave = e => {
     e.preventDefault();
     const newErrors = validate();
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
+    localStorage.setItem('userProfile', JSON.stringify(form));
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+    localStorage.setItem('loggedInUser', JSON.stringify({ ...loggedInUser, ...form }));
     setEditMode(false);
-    // backend stuff would go here, i.e. save form data
+    // do NOT reload form from localStorage here!
   };
 
+  // reset form from localStorage or userData, exit edit mode
+  const handleCancel = () => {
+    setForm(getInitialProfile(userData));
+    setEditMode(false);
+    setErrors({});
+  };
+
+  // delete message
   const handleDelete = (msgId) => {
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
     fetch(`http://localhost:8080/api/messages/${msgId}?username=${loggedInUser.username}`, {
       method: 'DELETE'
     })
@@ -185,33 +202,37 @@ const handleSendMessage = async (e) => {
       });
   };
 
+  // logout
   const handleLogout = () => {
     setModal({
       show: true,
       message: "Alright fine, you're logged out. Just don't talk about anything you've seen here. Got it?"
-      });
+    });
   };
 
+  // confirm modal
   const handleModalConfirm = () => {
-  // this removes the user from localStorage & only logs the user out if the modal gets the logout message
-  if (modal.message.startsWith("Alright fine, you're logged out. Just don't talk about anything you've seen here. Got it?")) {
-    localStorage.removeItem('loggedInUser');
-    setModal({ show: false, message: '' });
-    navigate('/login', { replace: true });
-  } else {
-    setModal({ show: false, message: '' });
-  }
-};
+    if (modal.message.startsWith("Alright fine, you're logged out. Just don't talk about anything you've seen here. Got it?")) {
+      localStorage.removeItem('loggedInUser');
+      setModal({ show: false, message: '' });
+      navigate('/login', { replace: true });
+    } else {
+      setModal({ show: false, message: '' });
+    }
+  };
+
+  // admin status
+  const isAdmin = (() => {
+    const user = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+    return user.role === 'ADMIN';
+  })();
 
   // messaging tab logic
   const chatList = chats || [];
   const currentChat = chatList.find(chat => chat.id === selectedChat);
 
   return (
-  
-  <main
-    className="account-container"
-    style={{
+    <main className="account-container" style={{
       minHeight: '80vh',
       display: 'flex',
       justifyContent: 'center',
@@ -219,31 +240,26 @@ const handleSendMessage = async (e) => {
       background: 'transparent',
       width: '100%',
       padding: '32px 0',
-      fontFamily: 'Roboto, Arial, Helvetica, sans-serif' 
-    }}
-  >
-      <section
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '32px',
-          width: '100%',
-          maxWidth: '900px',
-          marginTop: '120px',
-          marginBottom: '48px',
-          boxSizing: 'border-box'
-        }}
-      >
+      fontFamily: 'Roboto, Arial, Helvetica, sans-serif'
+    }}>
+      <section style={{
+        display: 'flex',
+        flexDirection: 'row',
+        gap: '32px',
+        width: '100%',
+        maxWidth: '900px',
+        marginTop: '120px',
+        marginBottom: '48px',
+        boxSizing: 'border-box'
+      }}>
         {/* tabs */}
-        <div
-          style={{
-            minWidth: '180px',
-            borderRight: '1px solid #333',
-            paddingRight: '18px',
-            display: 'flex',
-            flexDirection: 'column'
-          }}
-        >
+        <div style={{
+          minWidth: '180px',
+          borderRight: '1px solid #333',
+          paddingRight: '18px',
+          display: 'flex',
+          flexDirection: 'column'
+        }}>
           {initialTabs.map(tab => (
             <div
               key={tab}
@@ -261,15 +277,13 @@ const handleSendMessage = async (e) => {
           ))}
         </div>
         {/* content in the tab */}
-        <div
-          style={{
-            flex: 1,
-            paddingLeft: '32px',
-            boxSizing: 'border-box',
-            width: '100%',
-            minWidth: 0
-          }}
-        >
+        <div style={{
+          flex: 1,
+          paddingLeft: '32px',
+          boxSizing: 'border-box',
+          width: '100%',
+          minWidth: 0
+        }}>
           {activeTab === 'General Information' && (
             <form
               className="account-form"
@@ -282,15 +296,13 @@ const handleSendMessage = async (e) => {
               onSubmit={handleSave}
             >
               <h2 style={{ color: '#111', textAlign: 'left' }}>Profile</h2>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '24px',
-                  marginBottom: '18px',
-                  flexWrap: 'wrap'
-                }}
-              >
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '24px',
+                marginBottom: '18px',
+                flexWrap: 'wrap'
+              }}>
                 <img
                   src={form.avatar}
                   alt="Avatar"
@@ -403,20 +415,21 @@ const handleSendMessage = async (e) => {
                 />
                 {errors.birthdate && <span style={{ color: '#fff' }}>{errors.birthdate}</span>}
               </label>
-              <div style={{ display: 'flex', gap: '12px', marginTop: '18px', flexWrap: 'wrap' }}>
-                {!editMode ? (
-                  <button type="button" onClick={() => setEditMode(true)}>
-                    Edit
-                  </button>
-                ) : (
-                  <>
-                    <button type="submit">Save</button>
-                    <button type="button" onClick={() => setEditMode(false)}>
-                      Cancel
-                    </button>
-                  </>
-                )}
-              </div>
+<div style={{ display: 'flex', gap: '12px', marginTop: '18px', flexWrap: 'wrap' }}>
+  {!editMode ? (
+    <EditButton onClick={handleEdit} />
+  ) : (
+    <>
+      <button type="submit">Save</button>
+      <button
+        type="button"
+        onClick={handleCancel}
+      >
+        Cancel
+      </button>
+    </>
+  )}
+</div>
             </form>
           )}
           {activeTab === 'Messaging' && (
@@ -430,6 +443,9 @@ const handleSendMessage = async (e) => {
                 height: 'auto'
               }}
             >
+              <div style={{ marginBottom: '8px', textAlign: 'right' }}>
+
+    </div>
               <div
                 style={{
                   display: 'flex',
@@ -508,33 +524,32 @@ const handleSendMessage = async (e) => {
                                   style={{ display: 'block', marginTop: '8px', width: '100%' }}
                                 >
                                   <source src={msg.audio} type="audio/wav" />
-                                  Your browser does not support this thing.
+                                  your browser does not support this thing.
                                 </audio>
                               )}
                               {/* admin delete button */}
                               {isAdmin && (
                                 <button
                                   style={{
-                                  marginLeft: '10px',
-                                  background: 'red',
-                                  color: '#fff',
-                                  border: 'none',
-                                  borderRadius: '4px',
-                                  padding: '2px 8px',
-                                  cursor: 'pointer'
-                               }}
-                                onClick={() => handleDelete(msg.id)}
-                              >
-                                Delete
-                              </button>
-                            )}
+                                    marginLeft: '10px',
+                                    background: 'red',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    padding: '2px 8px',
+                                    cursor: 'pointer'
+                                  }}
+                                  onClick={() => handleDelete(msg.id)}
+                                >
+                                  Delete
+                                </button>
+                              )}
                             </span>
                           </div>
                         ))}
                       </div>
                       {/* message input */}
-                      <form style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }} onSubmit={handleSendMessage}
-                      >
+                      <form style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }} onSubmit={handleSendMessage}>
                         <input
                           type="text"
                           placeholder="Type a message..."
@@ -572,18 +587,17 @@ const handleSendMessage = async (e) => {
               </div>
             </div>
           )}
-      {activeTab === 'My Goons' && (
-        <div style={{ width: '100%', margin: '0 auto', maxWidth: '600px' }}>
-          <MyGoons
-            goons={myGoons}
-            onRemove={onRemove}
-            updateWallet={updateWallet}
-            wallet={wallet}
-          />
-        </div>
-      )}
-
-      {activeTab === 'Logout' && (
+          {activeTab === 'My Goons' && (
+            <div style={{ width: '100%', margin: '0 auto', maxWidth: '600px' }}>
+              <MyGoons
+                goons={myGoons}
+                onRemove={onRemove}
+                updateWallet={updateWallet}
+                wallet={wallet}
+              />
+            </div>
+          )}
+          {activeTab === 'Logout' && (
             <div style={{ padding: '32px', textAlign: 'center' }}>
               <button
                 style={{

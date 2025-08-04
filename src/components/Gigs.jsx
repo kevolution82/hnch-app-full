@@ -17,6 +17,16 @@ function Gigs({ userName }) {
       : [
           {
             id: 1,
+            name: 'Gustavo Salazar',
+            owner: 'Gustavo Salazar',
+            title: 'A Mrs. Doubtfire Situation',
+            skills: 'Espionage, House-Keeping',
+            description:
+              'There’s a guy who needs to get into his ex-wife’s house without her knowing. Need someone who can cook, clean, and not be noticed. Must be able to do a good British accent.',
+            date: '2025-05-26T10:15:00',
+          },
+          {
+            id: 2,
             name: 'Johnny Tightlips',
             owner: 'Johnny Tightlips',
             title: 'Need muscle for pawn shop job',
@@ -26,7 +36,7 @@ function Gigs({ userName }) {
             date: '2025-05-26T10:15:00',
           },
           {
-            id: 2,
+            id: 3,
             name: 'Petey No-Nose',
             owner: 'Petey No-Nose',
             title: 'Safe cracking on the East Side',
@@ -36,7 +46,7 @@ function Gigs({ userName }) {
             date: '2025-05-25T14:30:00',
           },
           {
-            id: 3,
+            id: 4,
             name: 'Louie DeLuca',
             owner: 'Louie DeLuca',
             title: 'Stand-in for alibi at Italian joint',

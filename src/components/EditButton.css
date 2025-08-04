@@ -1,0 +1,21 @@
+.edit-btn {
+  background: orange;
+  color: #222;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 24px;
+  font-weight: bold;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.edit-btn:hover:enabled {
+  background: #ffb84d;
+}
+
+.edit-btn:disabled {
+  background: #ccc;
+  color: #888;
+  cursor: not-allowed;
+}
