@@ -38,7 +38,7 @@ public class MessageController {
     Long userId = Long.valueOf(msg.get("userId").toString());
 
     // get messages for this user and this character
-    List<Message> existing = messageRepo.findByUserIdAndCharacter(userId, character);
+    List<Message> existing = messageRepo.findByUserIdAndCharacterName(userId, character);
     if (existing.isEmpty()) {
         Message defaultMsg = new Message();
         defaultMsg.setUserId(userId);
@@ -56,6 +56,7 @@ public class MessageController {
                 break;
             case "petey no-nose":
                 defaultMsg.setText("🔊 [Voice message]");
+                defaultMsg.setAudio("/petey.wav");
                 break;
             default:
         defaultMsg.setText("Hello!");
@@ -100,16 +101,46 @@ public class MessageController {
     aiReply.setText(aiReplyText);
     aiReply.setSender(character);
     aiReply.setTimestamp(LocalDateTime.now());
+    if (character.trim().toLowerCase().equals("petey no-nose")) {
+    aiReply.setAudio("/petey.wav");
+    }
     messageRepo.save(aiReply);
 
     // return all messages for this user and character
-    return messageRepo.findByUserIdAndCharacter(userId, character);
+    return messageRepo.findByUserIdAndCharacterName(userId, character);
     }
 
     // get all messages for a user
     @GetMapping("/{userId}/{character}")
     public List<Message> getMessages(@PathVariable Long userId, @PathVariable String character) {
-    return messageRepo.findByUserIdAndCharacter(userId, character);
+    List<Message> messages = messageRepo.findByUserIdAndCharacterName(userId, character);
+    if (messages.isEmpty()) {
+        Message defaultMsg = new Message();
+        defaultMsg.setUserId(userId);
+        defaultMsg.setCharacterName(character);
+        defaultMsg.setSender(character);
+        switch (character.trim().toLowerCase()) {
+            case "sal":
+                defaultMsg.setText("Ay, I saw your gig post. You need muscle or you need brains? Either way, I'm your guy. Let's talk business.");
+                break;
+            case "sssteven":
+                defaultMsg.setText("Hisss... I sssaw your gig. Doesss it involve ratsss? I can handle ratsss... for a price.");
+                break;
+            case "grandma":
+                defaultMsg.setText("Hi honey, can you help me with the remote again? I can't find the Netflix button. Love you!");
+                break;
+            case "petey no-nose":
+                defaultMsg.setText("🔊 [Voice message]");
+                defaultMsg.setAudio("/petey.wav");
+                break;
+            default:
+                defaultMsg.setText("Hello!");
+        }
+        defaultMsg.setTimestamp(LocalDateTime.now());
+        messageRepo.save(defaultMsg);
+        messages = List.of(defaultMsg);
+    }
+    return messages;
 }
 
     // update a message

@@ -28,5 +28,5 @@ app.env
 =======
 
 # ignore spring boot application properties (contains secrets)
-src/main/resources/application.propertiesapplication.properties
+src/main/resources/application.properties
 >>>>>>> 77a225b (stopped tracking application.properties & fixed MySQL issue not returning a table)

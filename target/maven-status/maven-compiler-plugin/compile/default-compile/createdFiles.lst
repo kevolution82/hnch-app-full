@@ -1,0 +1,7 @@
+hnch_app_backend\model\Message.class
+hnch_app_backend\controller\UserController.class
+hnch_app_backend\controller\MessageController.class
+hnch_app_backend\repository\UserRepository.class
+hnch_app_backend\model\User.class
+hnch_app_backend\AppApplication.class
+hnch_app_backend\repository\MessageRepository.class

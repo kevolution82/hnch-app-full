@@ -28,9 +28,18 @@ public class Message {
     private LocalDateTime timestamp;
     // which character is used for the message
     private String characterName;
+    private String audio;
 
     public String getCharacterName() {
     return characterName;
+    }
+
+    public String getAudio() {
+    return audio;
+    }
+
+    public void setAudio(String audio) {
+    this.audio = audio;
     }
 
     public void setCharacterName(String characterName) {

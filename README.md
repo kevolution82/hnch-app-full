@@ -1,8 +1,20 @@
-# HNCH App (HIre New Crew Here)
+# HNCH App (Hire New Crew Here)
 
 ## Project Description
 
-HNCH (Hire New Crew Here) solves a problem that has long since plagued super villains - finding good help. Gone are the days of 
+## Out-of-character descrption
+HNCH is a full-stack web application that lets users hire fictional henchpeople while managing money, contracts, and interactions through a playful but fully functional interface. It features user authentication with credential storage, a wallet UI that tracks available funds and adjusts after hiring or firing goons, and conditional pricing that changes depending on which goons are paired together. Some combinations increase cost, while others apply discounts. Users can post gigs, browse candidates, and perform full CRUD operations tied to a backend database. A built-in chat tab uses the Gemini API to simulate conversations with multiple custom personalities, adding an interactive layer to the experience while showcasing API integration and state management.
+
+## In-Character Description
+HNCH (Hire New Crew Here) solves a problem that has long since plagued super villains - finding good help. Gone are the days of settling for unreliable goons who barely show up or panic at the first sign of resistance. You're a villain who cares about results. You don't want to hire your cousin's friend of a friend. You don't want to deal with shady black market recruiters.
+
+HNCH is here to solve all of your henchpeople hiring woes.
+
+This platform eliminates the guesswork. Every candidate comes with a profile, complete with skills, experience, and a criminal background summary that’s actually useful. You’ll know who served time and who snitched.
+
+Hiring is straightforward. Sort by cost, years of experience, or just scroll until someone stands out. You don’t need a middleman anymore. You need reliability.
+
+HNCH exists because your operation deserves better than amateurs and secondhand referrals. If it all goes sideways, it won’t be because you hired the wrong crew.
 
 ------
 
@@ -58,15 +70,13 @@ HNCH (Hire New Crew Here) solves a problem that has long since plagued super vil
 
 ## Wireframes
 
-- [View wireframes (Google Drive)](https://drive.google.com/your-wireframes-link)
-  *(Replace with your actual link or embed images)*
+- [View wireframes (Google Drive)](https://drive.google.com/file/d/1gG_k6nwxRLm6LEPiEsL46inYkSyeeGXi/view?usp=sharing)
 
 ------
 
 ## ER Diagram
 
-- [View ER diagram (Google Drive)](https://drive.google.com/your-er-diagram-link)
-  *(Replace with your actual link or embed images)*
+- [View ER diagram (Google Drive)](https://docs.google.com/document/d/1nNNy5MtXPg8vz8Mj7SaQBxTrZiQ2oGplDOd9HRUoFpY/edit?usp=sharing)
 
 ------
 
