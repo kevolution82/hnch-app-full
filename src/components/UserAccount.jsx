@@ -4,7 +4,7 @@ import './UserAccount.css';
 import MyGoons from './MyGoons';
 import ConfirmModal from './ConfirmModal'; 
 
-const defaultAvatar = 'https://via.placeholder.com/150?text=Avatar';
+const defaultAvatar = 'https://static.wixstatic.com/media/7a4abc_a01c97c757434c33b4c1b7777e4a4934~mv2.png';
 
 const initialTabs = ['General Information', 'Messaging', 'My Goons', 'Logout'];
 
@@ -80,16 +80,17 @@ const [activeTab, setActiveTab] = useState(() => {
   const [selectedChat, setSelectedChat] = useState(chats?.[0]?.id || null);
   const [messageInput, setMessageInput] = useState('');
   const [messages, setMessages] = useState([]);
-  const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
   const isAdmin = loggedInUser.role === 'ADMIN';
 
 useEffect(() => {
-  if (activeTab === 'Messaging') {
-    // update messages when selectedChat changes
-    const chat = chats.find(c => c.id === selectedChat);
-    setMessages(chat ? chat.messages : []);
+  if (activeTab === 'Messaging' && selectedChat) {
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+    const userId = loggedInUser.id || 1;
+    fetch(`http://localhost:8080/api/messages/${userId}/${selectedChat}`)
+      .then(res => res.ok ? res.json() : [])
+      .then(data => setMessages(data || []));
   }
-}, [activeTab, selectedChat, chats]);
+}, [activeTab, selectedChat]);
 
   // does the avatar upload
   const handleAvatarChange = e => {
@@ -110,15 +111,13 @@ useEffect(() => {
   }
 };
 
-  const handleSendMessage = async (e) => {
+const handleSendMessage = async (e) => {
   e.preventDefault();
   if (!messageInput.trim() || !selectedChat) return;
 
-  // sends message to the backend so the ai can reply for all characters
   try {
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
     const userId = loggedInUser.id || 1;
-    // this finds the chat object for the selected chat
     const chat = chats.find(c => c.id === selectedChat);
     const character = chat ? chat.id : selectedChat;
 
@@ -133,7 +132,9 @@ useEffect(() => {
     });
 
     if (res.ok) {
-      const updatedMessages = await res.json();
+      // this always reloads messages after sending
+      const response = await fetch(`http://localhost:8080/api/messages/${userId}/${character}`);
+      const updatedMessages = response.ok ? await response.json() : [];
       setMessages(updatedMessages);
       setMessageInput('');
     } else {

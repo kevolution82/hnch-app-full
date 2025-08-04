@@ -20,7 +20,7 @@ function Login() {
     const avatar =
       existingProfile.username === user.username && existingProfile.avatar
         ? existingProfile.avatar
-        : user.avatar || 'https://via.placeholder.com/150?text=Avatar';
+        : user.avatar || 'https://static.wixstatic.com/media/7a4abc_a01c97c757434c33b4c1b7777e4a4934~mv2.png';
     // merges all existing profile fields but updates with latest user info and avatar
     localStorage.setItem(
       'userProfile',

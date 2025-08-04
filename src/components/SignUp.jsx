@@ -95,7 +95,7 @@ const validate = () => {
     organization: form.organization,
     aliases: form.aliases,
     birthdate: form.birthdate,
-    avatar: 'https://via.placeholder.com/150?text=Avatar'
+    avatar: 'https://static.wixstatic.com/media/7a4abc_a01c97c757434c33b4c1b7777e4a4934~mv2.png'
   }));
   setModal({ show: true, message: 'Account created! Please check ya email to confirm!' });
 };
