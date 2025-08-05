@@ -66,8 +66,8 @@ function UserAccount({
   // only initialize from localStorage/userData ONCE!!
   const [form, setForm] = useState(() => getInitialProfile(userData));
   const [activeTab, setActiveTab] = useState(() =>
-  localStorage.getItem('accountActiveTab') || initialTabs[0]
-);
+    localStorage.getItem('accountActiveTab') || initialTabs[0]
+  );
   const [avatarFile, setAvatarFile] = useState(null);
   const [errors, setErrors] = useState({});
   const [selectedChat, setSelectedChat] = useState(chats?.[0]?.id || null);
@@ -80,35 +80,35 @@ function UserAccount({
   }, [activeTab]);
 
   // load messages for selected chat
-useEffect(() => {
-  if (activeTab !== 'Messaging' || !selectedChat) return;
+  useEffect(() => {
+    if (activeTab !== 'Messaging' || !selectedChat) return;
 
-  const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
-  const userId = loggedInUser.id || 1;
-  fetch(`http://localhost:8080/api/messages/${userId}/${selectedChat}`)
-    .then(res => res.ok ? res.json() : [])
-    .then(data => setMessages(data))
-    .catch(() => setMessages([]));
-}, [activeTab, selectedChat]);
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+    const userId = loggedInUser.id || 1;
+    fetch(`http://localhost:8080/api/messages/${userId}/${selectedChat}`)
+      .then(res => res.ok ? res.json() : [])
+      .then(data => setMessages(data))
+      .catch(() => setMessages([]));
+  }, [activeTab, selectedChat]);
 
   // does the avatar upload
-const handleAvatarChange = e => {
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = ev => {
-      setForm(prev => {
-        const updated = { ...prev, avatar: ev.target.result };
-        // save avatar to localStorage immediately
-        const stored = JSON.parse(localStorage.getItem('userProfile') || '{}');
-        localStorage.setItem('userProfile', JSON.stringify({ ...stored, avatar: ev.target.result }));
-        return updated;
-      });
-      setAvatarFile(file);
-    };
-    reader.readAsDataURL(file);
-  }
-};
+  const handleAvatarChange = e => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        setForm(prev => {
+          const updated = { ...prev, avatar: ev.target.result };
+          // save avatar to localStorage immediately
+          const stored = JSON.parse(localStorage.getItem('userProfile') || '{}');
+          localStorage.setItem('userProfile', JSON.stringify({ ...stored, avatar: ev.target.result }));
+          return updated;
+        });
+        setAvatarFile(file);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   // handles field changes
   const handleChange = e => {
@@ -415,21 +415,21 @@ const handleAvatarChange = e => {
                 />
                 {errors.birthdate && <span style={{ color: '#fff' }}>{errors.birthdate}</span>}
               </label>
-<div style={{ display: 'flex', gap: '12px', marginTop: '18px', flexWrap: 'wrap' }}>
-  {!editMode ? (
-    <EditButton onClick={handleEdit} />
-  ) : (
-    <>
-      <button type="submit">Save</button>
-      <button
-        type="button"
-        onClick={handleCancel}
-      >
-        Cancel
-      </button>
-    </>
-  )}
-</div>
+              <div style={{ display: 'flex', gap: '12px', marginTop: '18px', flexWrap: 'wrap' }}>
+                {!editMode ? (
+                  <EditButton onClick={handleEdit} />
+                ) : (
+                  <>
+                    <button type="submit">Save</button>
+                    <button
+                      type="button"
+                      onClick={handleCancel}
+                    >
+                      Cancel
+                    </button>
+                  </>
+                )}
+              </div>
             </form>
           )}
           {activeTab === 'Messaging' && (
@@ -445,7 +445,7 @@ const handleAvatarChange = e => {
             >
               <div style={{ marginBottom: '8px', textAlign: 'right' }}>
 
-    </div>
+              </div>
               <div
                 style={{
                   display: 'flex',
