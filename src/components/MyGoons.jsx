@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import './Hire.css'; // reuse styles from Hire to cut down on wasteful code to save the environment.
 import DangerModal from '../components/DangerModal';
 
-
+// used in UserAccount for goon management
 function MyGoons({ goons, onRemove, updateWallet }) {
   // Current sort dropdown value
   const [sortBy, setSortBy] = useState('Date');
