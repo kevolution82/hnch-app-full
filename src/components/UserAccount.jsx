@@ -168,17 +168,25 @@ function UserAccount({
   };
 
   // save edit changes
-  const handleSave = e => {
-    e.preventDefault();
-    const newErrors = validate();
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length > 0) return;
-    localStorage.setItem('userProfile', JSON.stringify(form));
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
-    localStorage.setItem('loggedInUser', JSON.stringify({ ...loggedInUser, ...form }));
-    setEditMode(false);
-    // do NOT reload form from localStorage here!
-  };
+  const handleSave = async e => {
+  e.preventDefault();
+  const newErrors = validate();
+  setErrors(newErrors);
+  if (Object.keys(newErrors).length > 0) return;
+
+  // PUT request to backend
+  await fetch(`http://localhost:8080/api/users/${form.username}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(form),
+  });
+
+  // keeps localStorage updated for offline/demo use
+  localStorage.setItem('userProfile', JSON.stringify(form));
+  const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+  localStorage.setItem('loggedInUser', JSON.stringify({ ...loggedInUser, ...form }));
+  setEditMode(false);
+};
 
   // reset form from localStorage or userData, exit edit mode
   const handleCancel = () => {
