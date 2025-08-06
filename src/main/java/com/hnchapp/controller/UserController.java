@@ -1,10 +1,10 @@
-package hnch_app_backend.controller;
+package com.hnchapp.controller;
 
 // this is the user controller for handling sign up and login
 // it uses the user repository to save and find users
 
-import hnch_app_backend.model.User;
-import hnch_app_backend.repository.UserRepository;
+import com.hnchapp.model.User;
+import com.hnchapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

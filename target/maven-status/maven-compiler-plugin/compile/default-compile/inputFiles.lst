@@ -1,7 +1,7 @@
-C:\Users\altvb\hnch-app2\src\main\java\hnch_app_backend\AppApplication.java
-C:\Users\altvb\hnch-app2\src\main\java\hnch_app_backend\controller\MessageController.java
-C:\Users\altvb\hnch-app2\src\main\java\hnch_app_backend\controller\UserController.java
-C:\Users\altvb\hnch-app2\src\main\java\hnch_app_backend\model\Message.java
-C:\Users\altvb\hnch-app2\src\main\java\hnch_app_backend\model\User.java
-C:\Users\altvb\hnch-app2\src\main\java\hnch_app_backend\repository\MessageRepository.java
-C:\Users\altvb\hnch-app2\src\main\java\hnch_app_backend\repository\UserRepository.java
+C:\Users\altvb\hnch-app2\src\main\java\com\hnchapp\AppApplication.java
+C:\Users\altvb\hnch-app2\src\main\java\com\hnchapp\controller\MessageController.java
+C:\Users\altvb\hnch-app2\src\main\java\com\hnchapp\controller\UserController.java
+C:\Users\altvb\hnch-app2\src\main\java\com\hnchapp\model\Message.java
+C:\Users\altvb\hnch-app2\src\main\java\com\hnchapp\model\User.java
+C:\Users\altvb\hnch-app2\src\main\java\com\hnchapp\repository\MessageRepository.java
+C:\Users\altvb\hnch-app2\src\main\java\com\hnchapp\repository\UserRepository.java

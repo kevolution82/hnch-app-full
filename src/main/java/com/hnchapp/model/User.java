@@ -1,4 +1,4 @@
-package hnch_app_backend.model;
+package com.hnchapp.model;
 
 // this is the user model for storing user info
 // username and password are used for login

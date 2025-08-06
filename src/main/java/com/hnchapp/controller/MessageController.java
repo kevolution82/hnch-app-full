@@ -1,13 +1,13 @@
-package hnch_app_backend.controller;
+package com.hnchapp.controller;
 
 // this is the message controller for sending and getting messages
 // it uses the message repository to save and find messages
 // now it will get ai replies from the gemini server
 
-import hnch_app_backend.model.Message;
-import hnch_app_backend.model.User;
-import hnch_app_backend.repository.UserRepository;
-import hnch_app_backend.repository.MessageRepository;
+import com.hnchapp.model.Message;
+import com.hnchapp.model.User;
+import com.hnchapp.repository.UserRepository;
+import com.hnchapp.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;

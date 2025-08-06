@@ -25,7 +25,7 @@ HNCH exists because your operation deserves better than amateurs and secondhand 
 - **Database:** MySQL
 - **AI Integration:** Node.js Gemini AI server (Google Gemini API for Chatbot)
 - **Testing:** Jest (React), Manual testing
-- **Other:** Maven, Axios, REST API's
+- **Other:** Maven, REST API's
 
 ------
 

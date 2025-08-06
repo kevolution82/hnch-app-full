@@ -1,4 +1,4 @@
-package hnch_app_backend.model;
+package com.hnchapp.model;
 
 // this is the message model I'll use for storing the chat messages
 // sender can be "user" or "ai", real users can't be used so we're going to simulate it
