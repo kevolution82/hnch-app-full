@@ -7,7 +7,6 @@
   padding: 40px;
 }
 
-/* login form */
 .login-form {
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 20px;
@@ -22,7 +21,6 @@
   font-family: Arial, sans-serif;
 }
 
-/* headline */
 .login-form h2 {
   margin-bottom: 10px;
   text-align: center;
@@ -30,7 +28,6 @@
   font-weight: 600;
 }
 
-/* label & input styling */
 .login-form label {
   display: flex;
   flex-direction: column;
@@ -57,7 +54,6 @@
   box-shadow: 0 0 6px #0078d7;
 }
 
-/* button styling - matches Hire Goon button */
 .login-form button[type="submit"] {
   margin-top: 15px;
   padding: 10px 16px;
@@ -75,7 +71,6 @@
   background-color: #ffaa00;
 }
 
-/* create account link */
 .create-account-link {
   margin-top: 10px;
   text-align: center;

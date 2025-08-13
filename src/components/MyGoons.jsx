@@ -1,17 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
-import './Hire.css'; // reuse styles from Hire to cut down on wasteful code to save the environment.
+import './Hire.css';
 import DangerModal from '../components/DangerModal';
 
-// used in UserAccount for goon management
 function MyGoons({ goons, onRemove, updateWallet }) {
-  // Current sort dropdown value
   const [sortBy, setSortBy] = useState('Date');
-  // Loads the team name from localStorage, or sets a default if it's not there
   const [teamName, setTeamName] = useState(() => {
     return localStorage.getItem('teamName') || 'Your Crew Name';
   });
-  // Toggles whether the team name is being edited
   const [isEditing, setIsEditing] = useState(false);
 
   // Double check localStorage in case another component changed the team name
@@ -29,7 +25,6 @@ function MyGoons({ goons, onRemove, updateWallet }) {
     localStorage.setItem('teamName', teamName);
   };
 
-  // Sorts the hired goons based on the dropdown selection
   const sortedGoons = [...goons].sort((a, b) => {
     if (sortBy === 'Age') return a.age - b.age;
     if (sortBy === 'Cost') return a.fee - b.fee;
@@ -50,7 +45,6 @@ const removeFromLocalStorage = (id) => {
   }
 };
 
-// Randomized message for the fire confirmation popup
 const removalMessages = [
   goon => `You sure you want to let ${goon.name} go? They might not take it well.`,
   goon => `Removing ${goon.name}? Hope they don’t come back for revenge...`,
@@ -64,13 +58,11 @@ const removalMessages = [
 const [goonToRemove, setGoonToRemove] = useState(null);
 const [showRemoveDialog, setShowRemoveDialog] = useState(false);
 
-// Triggered when the user clicks "Remove Goon"
 const handleRemoveClick = (goon) => {
   setGoonToRemove(goon);
   setShowRemoveDialog(true);
 };
 
-// If the user confirms in DangerModal
 const confirmRemove = () => {
   if (goonToRemove) {
     removeFromLocalStorage(goonToRemove.id);
@@ -81,7 +73,6 @@ const confirmRemove = () => {
   setGoonToRemove(null);
 };
 
-// If the user cancels the modal
 const cancelRemove = () => {
   setShowRemoveDialog(false);
   setGoonToRemove(null);
@@ -172,5 +163,4 @@ return (
   );
 }
 
-// Makes the component available for routing and use in App.jsx
 export default MyGoons;

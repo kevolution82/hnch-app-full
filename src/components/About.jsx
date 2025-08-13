@@ -1,4 +1,3 @@
-// Imports React and the styles for this screen.
 import React from 'react';
 import aboutLogo from '../assets/about-logo.png';
 import './About.css';
@@ -9,7 +8,6 @@ function About() {
       <img src={aboutLogo} alt="About Logo" className="about-logo" />
 
       <div className="about-box">
-        {/* Giving each paragraph some breathing room with some spacing */}
 <p style={{ marginBottom: '2em' }}>
   You're a villain who cares about results. You don't want anymore half-butted jobs. You don't want to hire your cousin's friend of a friend. You don't want to deal with shady black market recruiters.
 </p>
@@ -37,5 +35,4 @@ function About() {
   );
 }
 
-// Export component for use in routing
 export default About;

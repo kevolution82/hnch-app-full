@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
-// Styles for Hire screen
 import './Hire.css';
-// Modal for delete/confirm actions
 import DangerModal from '../components/DangerModal';
 
-
-// All goons available for hire
 const goonData = [
   {
     id: 1,
@@ -290,23 +286,14 @@ const goonData = [
 ];
 
 function Hire({ onHire, updateWallet, wallet }) {
-  // Sort dropdown option chosen by user
   const [sortBy, setSortBy] = useState('Date');
-  // Used for showing who was just hired
   const [hiredGoon, setHiredGoon] = useState(null);
-  // If someone tries to rehire a goon they already hired
   const [alreadyHired, setAlreadyHired] = useState(null);
-  // Controls the popup that shows a bigger image of a goon
   const [enlargedGoon, setEnlargedGoon] = useState(null);
-  // If the user doesn't have enough money for a goon
   const [cantAfford, setCantAfford] = useState(null);
-  // Used for showing the Back to Top button once scrolled down
   const [showButton, setShowButton] = useState(false);
-  // this is used with the DangerModal to create custom alert popups
   const [pairingMessage, setPairingMessage] = useState(null);
 
-
-  // Handles basic price tweaks based on goon skills
   const calculateAdjustedPrice = (goon) => {
   let basePrice = goon.fee || 10000;
 
@@ -316,7 +303,6 @@ function Hire({ onHire, updateWallet, wallet }) {
   return basePrice;
 };
 
-  // Show the "Back to Top" button only when scrolling down
   useEffect(() => {
     const handleScroll = () => {
       setShowButton(window.scrollY > 200);
@@ -326,17 +312,14 @@ function Hire({ onHire, updateWallet, wallet }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Clicking a goon's image opens a full size popup
   const handleImageClick = (goon) => {
     setEnlargedGoon(goon);
   };
 
-  // Closing the goon image popup
   const handleClosePopup = () => {
     setEnlargedGoon(null);
   };
 
-  // Track which goons were hired using localStorage
   const [hiredIds, setHiredIds] = useState(() => {
     const saved = localStorage.getItem('hiredIds');
     return saved ? JSON.parse(saved) : [];
@@ -350,7 +333,6 @@ function Hire({ onHire, updateWallet, wallet }) {
     }
   }, []);
 
-  // Sorts goons based on whatever option the user picked
   const sortedGoons = [...goonData].sort((a, b) => {
     if (sortBy === 'Age') return a.age - b.age;
     if (sortBy === 'Cost') return a.fee - b.fee;
@@ -367,7 +349,7 @@ function Hire({ onHire, updateWallet, wallet }) {
       (goon.name === 'Gretch' && hiredGoons.some(g => g.name === 'Muncle')) ||
       (goon.name === 'Muncle' && hiredGoons.some(g => g.name === 'Gretch'));
 
-    // Hiring conflict penalty! :D
+    // Hiring conflict penalty!
     if (hiringGretchWithMuncle) {
       return {
         fee: goon.fee + 4000,
@@ -399,11 +381,9 @@ function Hire({ onHire, updateWallet, wallet }) {
       return;
     }
 
-    // Grab who is already hired so we can check for combos
     const hiredGoons = goonData.filter(g => hiredIds.includes(g.id));
     const { fee, reason } = applySpecialPricing(goon, hiredGoons);
 
-    // Show error if wallet is not big enough
     if (fee > wallet) {
       setCantAfford(`${goon.name} (${reason || 'Not enough funds'})`);
       setTimeout(() => setCantAfford(null), 2500);
@@ -422,7 +402,6 @@ updateWallet(-fee);
     setHiredGoon(goon.name);
     setTimeout(() => setHiredGoon(null), 2000);
 
-    // Show alert if there was a special fee reason
     if (reason) {
       setPairingMessage(reason);
 }
@@ -499,7 +478,6 @@ updateWallet(-fee);
               <p><strong>Known Snitch?:</strong> {goon.snitch ? '✅' : '❌'}</p>
               <p><strong>Biography:</strong> {goon.bio}</p>
 
-              {/* Hire button triggers handleHire logic */}
               <button className="hire-btn" onClick={() => handleHire(goon)}>
                 Hire Goon
               </button>

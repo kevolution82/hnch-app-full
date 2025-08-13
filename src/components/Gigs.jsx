@@ -1,11 +1,9 @@
-// Imports
 import React, { useState, useEffect } from 'react';
 import './Gigs.css';
 import CustomButton from './CustomButton';
 import './CustomButton.css';
 import DangerModal from './DangerModal';
 
-// Gigs board
 function Gigs({ userName }) {
   const LOCAL_STORAGE_KEY = 'fuhgetaboutit_gigs';
 

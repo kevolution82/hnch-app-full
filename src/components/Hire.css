@@ -1,11 +1,9 @@
-/* Main wrapper for Hire and MyGoons pages */
 .hire-container {
   padding: 40px 20px;
   color: white;
   font-family: Arial, sans-serif;
 }
 
-/* Sort bar under mobile menu */
 .filter-bar {
   margin-top: 80px;
   margin-bottom: 30px;
@@ -18,7 +16,6 @@
   gap: 10px;
 }
 
-/* Styling for the dropdown in the filter bar */
 .filter-bar select {
   padding: 6px;
   font-size: 16px;
@@ -28,14 +25,12 @@
   border: 1px solid white;
 }
 
-/* Vertical list of goon cards with even spacing */
 .goon-list {
   display: flex;
   flex-direction: column;
   gap: 30px;
 }
 
-/* Layout for each goon card */
 .goon-card {
   display: flex;
   flex-direction: column;
@@ -46,7 +41,6 @@
   width: 100%;
 }
 
-/* Goon image size and appearance */
 .goon-pic {
   width: 140px;
   height: 140px;
@@ -56,7 +50,6 @@
   margin-bottom: 15px;
 }
 
-/* Text block holding goon details */
 .goon-info {
   width: 100%;
   flex-grow: 1;
@@ -69,7 +62,6 @@
   color: orange;
 }
 
-/* Text styles for goon info */
 .goon-info p {
   margin: 4px 0;
   font-size: 16px;
@@ -80,7 +72,6 @@
   display: block;
 }
 
-/* MyGoons team name input bar */
 .hire-btn {
   margin-top: 15px;
   padding: 10px 16px;
@@ -102,7 +93,6 @@
   color: #00ff00;
 }
 
-/* Goon card switches to row layout on wider screens */
 @media (min-width: 768px) {
   .goon-card {
     flex-direction: row;
@@ -115,13 +105,12 @@
   }
 }
 
-/* Banner for feedback like a successful hire */
 .popup-banner {
   position: fixed;
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.7); /* 0.7 = 70% black LEAVE THIS ALONE */
+  background-color: rgba(0, 0, 0, 0.7);
   padding: 24px 36px;
   border-radius: 12px;
   font-size: 26px;
@@ -132,7 +121,6 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
-/* Animation for popup appearing and fading out */
 @keyframes fadeInOut {
   0% { opacity: 0; transform: translate(-50%, -60%); }
   10% { opacity: 1; transform: translate(-50%, -50%); }
@@ -140,7 +128,6 @@
   100% { opacity: 0; transform: translate(-50%, -60%); }
 }
 
-/* Bar at top of MyGoons for entering or editing a team name */
 .team-name-bar {
   display: flex;
   align-items: center;
@@ -149,7 +136,6 @@
   padding: 0 16px;
 }
 
-/* Label next to the input */
 .team-label {
   font-weight: bold;
   margin-right: 8px;
@@ -166,7 +152,6 @@
   color: #ff9900;
 }
 
-/* Wrapper to center the large editable team title */
 .team-title-wrapper {
   display: flex;
   justify-content: center;
@@ -177,7 +162,6 @@
   text-align: center;
 }
 
-/* Static team title display */
 .team-title {
   font-size: 48px;
   font-weight: 900;
@@ -192,7 +176,6 @@
   padding: 0 20px;
 }
 
-/* Input version of the title for editing */
 .team-title-input {
   font-size: 48px;
   font-weight: 900;
@@ -208,7 +191,6 @@
   box-shadow: 3px 3px 0 black;
 }
 
-/* Dark backdrop for image popup */
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -223,7 +205,6 @@
   animation: fadeInBackdrop 0.3s ease;
 }
 
-/* Centered image and name in popup */
 .popup-image-box {
   background: black;
   border-radius: 20px;
@@ -254,13 +235,11 @@
   text-align: center;
 }
 
-/* Fade in animation for overlay */
 @keyframes fadeInBackdrop {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-/* Scale animation for popup box */
 @keyframes scaleUp {
   from {
     transform: scale(0.8);
@@ -272,7 +251,6 @@
   }
 }
 
-/* Centered logo for different screens */
 .screen-logo {
   max-width: 400px;
   width: 100%;
@@ -287,7 +265,6 @@
   }
 }
 
-/* Layout for when there are no goons on the team */
 .no-goons-center {
   flex: 1;
   display: flex;
@@ -307,7 +284,6 @@
   display: block;
 }
 
-/* Scroll to top button in lower corner of screen */
 .scroll-to-top {
   position: fixed;
   bottom: 30px;
@@ -329,7 +305,6 @@
   background-color: #ffaa00;
 }
 
-/* Animation for cards appearing when page loads */
 @keyframes popIn {
   0% {
     opacity: 0;

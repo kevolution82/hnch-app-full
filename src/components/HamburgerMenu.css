@@ -1,4 +1,3 @@
-/* Hamburger toggle (shown on small screens) */
 .hamburger-wrapper {
   display: none;
   position: absolute;
@@ -7,7 +6,6 @@
   z-index: 100;
 }
 
-/* Hamburger icon (styled as big clickable text) */
 .hamburger {
   font-size: 30px;
   background: none;
@@ -16,7 +14,6 @@
   cursor: pointer;
 }
 
-/* Mobile dropdown menu */
 .mobile-menu {
   position: absolute;
   top: 70px;
@@ -35,7 +32,6 @@
   font-size: 18px;
 }
 
-/* Responsive: show hamburger, hide full navbar */
 @media (max-width: 768px) {
   .navbar {
     display: none;

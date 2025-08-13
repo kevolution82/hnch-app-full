@@ -5,6 +5,7 @@ import './App.css';
 
 import { BrowserRouter } from 'react-router-dom';
 
+// main entry point for the frontend
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
@@ -12,3 +13,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </BrowserRouter>
   </React.StrictMode>
 );
+
+// frontend will send requests to the backend to get or save data

@@ -1,21 +1,16 @@
-/* Basic reset so all elements start with a clean slate. */
+/* main styles for layout, navigation, and wallet display */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Makes anchor link scrolling feel smooth.
-   Prevents horizontal scrollbars and ensures full page height. */
 html {
   scroll-behavior: smooth;
   min-height: 100%;
   overflow-x: hidden;
 }
 
-/* Sets the main font and background image.
-   Backgroundcovers the entire screen and stays centered.
-   Also disables horizontal scrolling. */
 body {
   font-family: 'Bebas Neue', sans-serif;
   background-image: url('/background.jpg');
@@ -28,7 +23,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Places the nav in the center near the top. Keeps the items spaced and above other elements. */
 .navbar {
   position: absolute;
   top: 40px;
@@ -39,7 +33,6 @@ body {
   z-index: 10;
 }
 
-/* Styles each nav link to look like a button with a semi-transparent background. */
 .navbar a {
   text-decoration: none;
   color: white;
@@ -51,13 +44,11 @@ body {
   transition: background-color 0.3s ease;
 }
 
-/* Adds a slight glow effect when hovering over links. */
 .navbar a:hover {
   background-color: rgba(255, 255, 255, 0.2);
   cursor: pointer;
 }
 
-/* Simple footer layout. Centers the content with a dark background to make everyhing easier to read. */
 .footer {
   display: flex;
   flex-direction: column;
@@ -71,7 +62,6 @@ body {
   text-transform: uppercase;
 }
 
-/* Footer link stays white by default and underlined to make it easier to read. */
 .footer-link {
   color: white;
   font-size: 16px;
@@ -80,12 +70,10 @@ body {
   transition: color 0.2s ease;
 }
 
-/* Changes link color when hovered to show it's interactive. */
 .footer-link:hover {
   color: #ffcc66;
 }
 
-/* Used for mobile — hidden on desktop by default. will be toggled visible on smaller screens. */
 .hamburger-wrapper {
   display: none;
   position: absolute;
@@ -94,7 +82,6 @@ body {
   z-index: 100;
 }
 
-/* The hamburger button is just a styled text symbol. No border or background to keep it minimal. */
 .hamburger {
   font-size: 32px;
   background: none;
@@ -103,7 +90,6 @@ body {
   cursor: pointer;
 }
 
-/* Styles the dropdown nav for mobile view. Appears just below the hamburger icon. */
 .mobile-menu {
   position: absolute;
   top: 60px;
@@ -116,7 +102,6 @@ body {
   width: max-content;
 }
 
-/* Menu links for mobile. They are spaced out and tappable. */
 .mobile-menu a {
   color: white;
   text-decoration: none;
@@ -128,12 +113,10 @@ body {
   transition: background 0.3s;
 }
 
-/* Light hover feedback on mobile menu links. */
 .mobile-menu a:hover {
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* Switches from desktop navbar to hamburger on smaller screens. */
 @media (max-width: 768px) {
   .navbar {
     display: none;
@@ -144,7 +127,6 @@ body {
   }
 }
 
-/* Main wrapper for the app. It keeps everything vertical and full height. */
 .page-wrapper {
   display: flex;
   flex-direction: column;
@@ -152,18 +134,15 @@ body {
   overflow: hidden;
 }
 
-/* This makes the main content scroll if it's taller than the screen. Useful for pages like Hire or Gigs. */
 .content {
   flex: 1;
   overflow-y: auto;
 }
 
-/* Optional class to prevent scrolling. It's used for homepage or splash screens. */
 .page-wrapper.no-scroll .content {
   overflow: hidden;
 }
 
-/* (Might be unused) Legacy wallet display styling. Can probably be removed if wallet-ui is the active one. :| */
 .wallet-display {
   position: fixed;
   top: 15px;
@@ -182,7 +161,6 @@ body {
   padding: 0;
 }
 
-/* Wallet shown in top right corner. Positioned above everything else and not clickable. */
 .wallet-ui {
   position: fixed;
   top: 16px;
@@ -196,7 +174,6 @@ body {
   pointer-events: none;
 }
 
-/* Bright green amount text with shadow to make it easier to read. */
 .wallet-amount {
   color: #00ff88;
   font-weight: bold;

@@ -8,31 +8,30 @@ function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  // handles login form submission and checks credentials against the localStorage
+  // handles login form submission and checks credentials against localStorage
   const handleSubmit = (e) => {
-  e.preventDefault();
-  const users = JSON.parse(localStorage.getItem('users') || '[]');
-  // this finds a user with matching username and password
-  const user = users.find(u => u.username === username && u.password === password);
-  if (user) {
-    localStorage.setItem('loggedInUser', JSON.stringify(user));
-    // it only updates fields that are missing and saves the avatar if it exists
-    const existingProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
-    // if the profile matches and has an avatar, use it, otherwise use the default
-    const avatar =
-      existingProfile.username === user.username && existingProfile.avatar
-        ? existingProfile.avatar
-        : user.avatar || 'https://static.wixstatic.com/media/7a4abc_a01c97c757434c33b4c1b7777e4a4934~mv2.png';
-    // merges all existing profile fields but updates with latest user info and avatar
-    localStorage.setItem(
-      'userProfile',
-      JSON.stringify({ ...existingProfile, ...user, avatar })
-    );
-    navigate('/account');
-  } else {
-    setError('Invalid username or password');
-  }
-};
+    e.preventDefault();
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    // find a user with matching username and password
+    const user = users.find(u => u.username === username && u.password === password);
+    if (user) {
+      localStorage.setItem('loggedInUser', JSON.stringify(user));
+      // update or create user profile in localStorage, keeping avatar if present
+      const existingProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+      const avatar =
+        existingProfile.username === user.username && existingProfile.avatar
+          ? existingProfile.avatar
+          : user.avatar || 'https://static.wixstatic.com/media/7a4abc_a01c97c757434c33b4c1b7777e4a4934~mv2.png';
+      localStorage.setItem(
+        'userProfile',
+        JSON.stringify({ ...existingProfile, ...user, avatar })
+      );
+      navigate('/account');
+    } else {
+      // show error if login fails
+      setError('Invalid username or password');
+    }
+  };
 
   return (
     <div className="login-container">

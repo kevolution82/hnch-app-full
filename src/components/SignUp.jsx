@@ -68,7 +68,6 @@ const validate = () => {
     const newErrors = validate();
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
-      // this shows the modal with error messages
       let msg = '';
       if (newErrors.email) msg += `${newErrors.email}\n`;
       if (newErrors.birthdate) msg += `${newErrors.birthdate}\n`;

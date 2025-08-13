@@ -1,18 +1,15 @@
-/* Page layout with top padding for navbar */
 .gigs-container {
   padding: 100px 20px 40px;
   color: white;
   font-family: Arial, sans-serif;
 }
 
-/* Centered Add Gig button */
 .gigs-header {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
 }
 
-/* Button to add a new gig – styled and centered */
 .add-gig-btn {
   padding: 10px 16px;
   font-size: 16px;
@@ -25,7 +22,6 @@
   margin: 0 auto;
 }
 
-/* Shared styles across gig sections */
 .gig-list, .gig-detail, .gig-form {
   background: rgba(0, 0, 0, 0.7);
   border-radius: 15px;
@@ -34,7 +30,6 @@
   margin: 0 auto;
 }
 
-/* Gig titles look clickable */
 .gig-title {
   font-size: 18px;
   margin-bottom: 10px;
@@ -44,23 +39,19 @@
   transition: color 0.2s;
 }
 
-/* Hover effect to make it pop */
 .gig-title:hover {
   color: orange;
 }
 
-/* Section header inside gig details */
 .gig-detail h2 {
   margin-bottom: 10px;
   color: orange;
 }
 
-/* Adds space between detail paragraphs*/
 .gig-detail p {
   margin: 8px 0;
 }
 
-/* Edit/Delete buttons with spacing */
 .gig-detail-actions button {
   margin-right: 10px;
   margin-top: 20px;
@@ -85,21 +76,18 @@
   margin-top: 5px;
 }
 
-/* Button row with spacing in form */
 .gig-form-actions {
   display: flex;
   gap: 10px;
   margin-top: 10px;
 }
 
-/* Message when there are no gigs */
 .no-gigs {
   text-align: center;
   padding: 30px;
   color: #ffcc00;
 }
 
-/* Logo positioning below navbar */
 .screen-logo {
   max-width: 400px;
   width: 100%;

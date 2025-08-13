@@ -59,11 +59,12 @@ function UserAccount({
   updateWallet,
   wallet
 }) {
-  const [modal, setModal] = useState({ show: false, message: '' });
-  const navigate = useNavigate();
-  const [editMode, setEditMode] = useState(false);
 
-  // only initialize from localStorage/userData ONCE!!
+  const [modal, setModal] = useState({ show: false, message: '' }); 
+  const navigate = useNavigate(); 
+  const [editMode, setEditMode] = useState(false); 
+
+  // only initialize from localStorage/userData ONCE
   const [form, setForm] = useState(() => getInitialProfile(userData));
   const [activeTab, setActiveTab] = useState(() =>
     localStorage.getItem('accountActiveTab') || initialTabs[0]
@@ -74,22 +75,23 @@ function UserAccount({
   const [messageInput, setMessageInput] = useState('');
   const [messages, setMessages] = useState([]);
 
-  // save active tab to localStorage
+  // save which tab is active
   useEffect(() => {
     localStorage.setItem('accountActiveTab', activeTab);
   }, [activeTab]);
 
-  // load messages for selected chat
-  useEffect(() => {
-    if (activeTab !== 'Messaging' || !selectedChat) return;
+  // load messages for selected chat wh en messaging tab is active
+useEffect(() => {
+  if (activeTab !== 'Messaging' || !selectedChat) return;
+  const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+  const userId = loggedInUser.id || 1;
 
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
-    const userId = loggedInUser.id || 1;
-    fetch(`http://localhost:8080/api/messages/${userId}/${selectedChat}`)
-      .then(res => res.ok ? res.json() : [])
-      .then(data => setMessages(data))
-      .catch(() => setMessages([]));
-  }, [activeTab, selectedChat]);
+  // fetches messages for this user and chat from the backend
+  fetch(`http://localhost:8080/api/messages/${userId}/${selectedChat}`)
+    .then(res => res.ok ? res.json() : [])
+    .then(data => setMessages(data))
+    .catch(() => setMessages([]));
+}, [activeTab, selectedChat]);
 
   // does the avatar upload
   const handleAvatarChange = e => {
@@ -110,22 +112,22 @@ function UserAccount({
     }
   };
 
-  // handles field changes
+  // handleChange updates the form state when the user types in a field
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // send message
+  // handleSendMessage sends the user's message to the backend and updates the chat window
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!messageInput.trim() || !selectedChat) return;
-
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
     const userId = loggedInUser.id || 1;
     const chat = chats.find(c => c.id === selectedChat);
     const character = chat ? chat.id : selectedChat;
-
+  
     try {
+
       const res = await fetch('http://localhost:8080/api/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -135,21 +137,22 @@ function UserAccount({
           character,
         }),
       });
-
+  
       if (res.ok) {
+        // fetch updated messages after sending
         const response = await fetch(`http://localhost:8080/api/messages/${userId}/${character}`);
         const updatedMessages = response.ok ? await response.json() : [];
         setMessages(updatedMessages);
-        setMessageInput('');
+        setMessageInput(''); // clear the input box
       } else {
-        setModal({ show: true, message: 'Failed to send message.' });
+        setModal({ show: true, message: 'failed to send message.' });
       }
     } catch (err) {
-      setModal({ show: true, message: 'Failed to send message.' });
+      setModal({ show: true, message: 'failed to send message.' });
     }
   };
 
-  // validate fields
+  // validate checks for required fields and valid email format before saving
   const validate = () => {
     const newErrors = {};
     ['fullName', 'username', 'email', 'birthdate'].forEach(field => {
@@ -167,35 +170,32 @@ function UserAccount({
     setErrors({});
   };
 
-  // save edit changes
+  // profile changes are saved both to the backend (PUT) and to localStorage
   const handleSave = async e => {
   e.preventDefault();
   const newErrors = validate();
   setErrors(newErrors);
   if (Object.keys(newErrors).length > 0) return;
 
-  // PUT request to backend
   await fetch(`http://localhost:8080/api/users/${form.username}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(form),
   });
 
-  // keeps localStorage updated for offline/demo use
   localStorage.setItem('userProfile', JSON.stringify(form));
   const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
   localStorage.setItem('loggedInUser', JSON.stringify({ ...loggedInUser, ...form }));
   setEditMode(false);
 };
 
-  // reset form from localStorage or userData, exit edit mode
   const handleCancel = () => {
     setForm(getInitialProfile(userData));
     setEditMode(false);
     setErrors({});
   };
 
-  // delete message
+  // only users with ADMIN role (from localStorage) see the delete button for messages
   const handleDelete = (msgId) => {
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
     fetch(`http://localhost:8080/api/messages/${msgId}?username=${loggedInUser.username}`, {
@@ -205,12 +205,12 @@ function UserAccount({
         if (!res.ok) throw new Error('Delete failed!');
         setMessages(messages.filter(m => m.id !== msgId));
       })
-      .catch(err => {
+      .catch(err => {        
         setModal({ show: true, message: 'Failed to delete message (ADMIN ONLY!).' });
       });
   };
 
-  // logout
+  // logging out clears the user from localStorage and navigates to login page
   const handleLogout = () => {
     setModal({
       show: true,
@@ -218,7 +218,6 @@ function UserAccount({
     });
   };
 
-  // confirm modal
   const handleModalConfirm = () => {
     if (modal.message.startsWith("Alright fine, you're logged out. Just don't talk about anything you've seen here. Got it?")) {
       localStorage.removeItem('loggedInUser');
@@ -235,7 +234,6 @@ function UserAccount({
     return user.role === 'ADMIN';
   })();
 
-  // messaging tab logic
   const chatList = chats || [];
   const currentChat = chatList.find(chat => chat.id === selectedChat);
 
@@ -504,6 +502,7 @@ function UserAccount({
                           padding: '12px'
                         }}
                       >
+
                         {messages.map((msg, idx) => (
                           <div
                             key={idx}

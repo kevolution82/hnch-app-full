@@ -1,4 +1,3 @@
-// Imports for state, routing, styles
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './HamburgerMenu.css';
@@ -6,7 +5,6 @@ import './HamburgerMenu.css';
 function HamburgerMenu() {
   const [open, setOpen] = useState(false);
 
-  // Tapping the icon shows or hides the menu
   return (
     <div className="hamburger-wrapper">
       <div className="hamburger-icon" onClick={() => setOpen(!open)}>
@@ -26,5 +24,4 @@ function HamburgerMenu() {
   );
 }
 
-// Exporting so we can use it in other parts of the app
 export default HamburgerMenu;

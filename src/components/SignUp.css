@@ -52,14 +52,12 @@
   transition: background-color 0.2s, color 0.2s;
 }
 
-/* focused input */
 .login-form input:focus {
   background-color: #333;
   color: #fff;
   box-shadow: 0 0 6px #0078d7;
 }
 
-/* chrome, edge, safari autofill fix */
 .login-form input:-webkit-autofill,
 .login-form input:-webkit-autofill:focus,
 .login-form input:-webkit-autofill:active {
@@ -73,7 +71,6 @@
   transition: background-color 9999s ease-in-out 0s;
 }
 
-/* firefox autofill fix */
 .login-form input:-moz-autofill {
   box-shadow: 0 0 0 1000px #222 inset !important;
   color: #fff !important;
@@ -82,7 +79,6 @@
   background-clip: padding-box !important;
 }
 
-/* error message styling */
 .login-form span {
   font-size: 0.95rem;
   color: orange;
@@ -123,7 +119,6 @@
   text-decoration: underline;
 }
 
-/* make the date input as big as the other fields */
 .login-form input[type="date"] {
   padding: 10px 12px;
   border-radius: 8px;
@@ -138,7 +133,6 @@
   transition: background-color 0.2s, color 0.2s;
 }
 
-/* date input */
 .login-form input[type="date"]:focus {
   background-color: #333;
   color: #fff;

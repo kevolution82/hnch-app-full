@@ -1,7 +1,6 @@
 import React from 'react';
 import './DangerModal.css';
 
-// Reusable modal for confirmations or alerts
 function ConfirmModal({ message, onConfirm, onCancel, confirmText = 'Yes', cancelText = 'Cancel', alertOnly = false }) {
   return (
     <div className="modal-overlay">

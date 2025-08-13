@@ -1,8 +1,6 @@
-// React core and styling for the Home screen
 import React from 'react';
 import './Home.css';
 
-// Displays the centered logo on the home page
 function Home() {
   return (
     <div className="home-page">
@@ -13,5 +11,4 @@ function Home() {
   );
 }
 
-// Export for use in routes or parent components
 export default Home;

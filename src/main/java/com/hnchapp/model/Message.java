@@ -1,9 +1,5 @@
 package com.hnchapp.model;
 
-// this is the message model I'll use for storing the chat messages
-// sender can be "user" or "ai", real users can't be used so we're going to simulate it
-// userId links the message to a user
-
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -15,18 +11,12 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // this links the message to a user
     private Long userId;
     @Lob
-    // allows longer text for the message
     @Column(length = 2048)
-    // this is the message content
     private String text;
-    // shows who sent the message
     private String sender;
-    // when the message was sent
     private LocalDateTime timestamp;
-    // which character is used for the message
     private String characterName;
     private String audio;
 

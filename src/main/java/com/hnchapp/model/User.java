@@ -1,9 +1,5 @@
 package com.hnchapp.model;
 
-// this is the user model for storing user info
-// username and password are used for login
-// email is for contact or confirmation
-
 import jakarta.persistence.*;
 
 @Entity
@@ -14,7 +10,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // stores user's username, password, email, and role
     private String username;
     private String password;
     private String email;

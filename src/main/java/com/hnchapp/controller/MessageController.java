@@ -1,9 +1,5 @@
 package com.hnchapp.controller;
 
-// this is the message controller for sending and getting messages
-// it uses the message repository to save and find messages
-// now it will get ai replies from the gemini server
-
 import com.hnchapp.model.Message;
 import com.hnchapp.model.User;
 import com.hnchapp.repository.UserRepository;
@@ -29,153 +25,159 @@ public class MessageController {
     @Autowired
     private UserRepository userRepo;
 
-    // helper to normalize character names
+    // normalize character names for consistency
     private String normalizeCharacter(String character) {
         return character == null ? "" : character.trim().toLowerCase();
     }
 
-    // send a message and get ai reply from gemini
+    // send a message, save it, get AI reply from Gemini, save reply, and return all messages for this chat
     @PostMapping
     public List<Message> sendMessage(@RequestBody Map<String, Object> msg) {
-        String userMessage = (String) msg.get("text");
-        String character = (String) msg.get("character");
-        Long userId = Long.valueOf(msg.get("userId").toString());
-        String normalizedCharacter = normalizeCharacter(character);
+    String userMessage = (String) msg.get("text");
+    String character = (String) msg.get("character");
+    Long userId = Long.valueOf(msg.get("userId").toString());
+    String normalizedCharacter = normalizeCharacter(character);
 
-        // get messages for this user and this character
-        List<Message> existing = messageRepo.findByUserIdAndCharacterName(userId, normalizedCharacter);
-        if (existing.isEmpty()) {
-            Message defaultMsg = new Message();
-            defaultMsg.setUserId(userId);
-            defaultMsg.setCharacterName(normalizedCharacter);
-            defaultMsg.setSender(normalizedCharacter);
-            switch (normalizedCharacter) {
-                case "sal":
-                    defaultMsg.setText("Ay, I saw your gig post. You need muscle or you need brains? Either way, I'm your guy. Let's talk business.");
-                    break;
-                case "sssteven":
-                    defaultMsg.setText("Hisss... I sssaw your gig. Doesss it involve ratsss? I can handle ratsss... for a price.");
-                    break;
-                case "grandma":
-                    defaultMsg.setText("Hi honey, can you help me with the remote again? I can't find the Netflix button. Love you!");
-                    break;
-                case "petey no-nose":
-                    defaultMsg.setText("🔊 [Voice message]");
-                    defaultMsg.setAudio("/petey.wav");
-                    break;
-                default:
-                    defaultMsg.setText("Hello!");
-            }
-            defaultMsg.setTimestamp(LocalDateTime.now());
-            messageRepo.save(defaultMsg);
+// insert default message if chat is empty
+List<Message> existing = messageRepo.findByUserIdAndCharacterName(userId, normalizedCharacter);
+
+if (existing.isEmpty()) {
+    Message defaultMsg = new Message();
+    defaultMsg.setUserId(userId);
+    defaultMsg.setCharacterName(normalizedCharacter);
+    defaultMsg.setSender(normalizedCharacter);
+    // sets up a default message if there are no messages yet for this chat
+    switch (normalizedCharacter) {
+        case "sal":
+            defaultMsg.setText("Ay, I saw your gig post. You need muscle or you need brains? Either way, I'm your guy. Let's talk business.");
+            break;
+        case "sssteven":
+            defaultMsg.setText("Hisss... I sssaw your gig. Doesss it involve ratsss? I can handle ratsss... for a price.");
+            break;
+        case "grandma":
+            defaultMsg.setText("Hi honey, can you help me with the remote again? I can't find the Netflix button. Love you!");
+            break;
+        case "petey no-nose":
+            defaultMsg.setText("🔊 [Voice message]");
+            defaultMsg.setAudio("/petey.wav");
+            break;
+        default:
+            defaultMsg.setText("Hello!");
+    }
+    defaultMsg.setTimestamp(LocalDateTime.now());
+    messageRepo.save(defaultMsg);
+}
+
+// saves the user's message to the database
+Message userMsg = new Message();
+userMsg.setUserId(userId);
+userMsg.setCharacterName(normalizedCharacter);
+userMsg.setText(userMessage);
+userMsg.setSender("user");
+userMsg.setTimestamp(LocalDateTime.now());
+messageRepo.save(userMsg);
+
+// get AI reply from Gemini server
+String geminiApiUrl = "http://localhost:4000/api/gemini-chat";
+String aiReplyText = "sorry, i got nothin' right now.";
+try {
+    RestTemplate restTemplate = new RestTemplate();
+    Map<String, String> request = new HashMap<>();
+    request.put("message", userMessage);
+    request.put("character", getCharacterId(normalizedCharacter));
+
+    ResponseEntity<Map> response = restTemplate.postForEntity(geminiApiUrl, request, Map.class);
+
+    if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+        Object replyObj = response.getBody().get("reply");
+        if (replyObj != null) {
+            aiReplyText = replyObj.toString();
         }
-
-        // save the user's message
-        Message userMsg = new Message();
-        userMsg.setUserId(userId);
-        userMsg.setCharacterName(normalizedCharacter);
-        userMsg.setText(userMessage);
-        userMsg.setSender("user");
-        userMsg.setTimestamp(LocalDateTime.now());
-        messageRepo.save(userMsg);
-
-        // talk to the gemini ai server for a reply
-        String geminiApiUrl = "http://localhost:4000/api/gemini-chat";
-        String aiReplyText = "sorry, i got nothin' right now.";
-
-        try {
-            RestTemplate restTemplate = new RestTemplate();
-            Map<String, String> request = new HashMap<>();
-            request.put("message", userMessage);
-            request.put("character", getCharacterId(normalizedCharacter));
-
-            ResponseEntity<Map> response = restTemplate.postForEntity(geminiApiUrl, request, Map.class);
-            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-                Object replyObj = response.getBody().get("reply");
-                if (replyObj != null) {
-                    aiReplyText = replyObj.toString();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Message aiReply = new Message();
-        aiReply.setUserId(userId);
-        aiReply.setCharacterName(normalizedCharacter);
-        aiReply.setText(aiReplyText);
-        aiReply.setSender(normalizedCharacter);
-        aiReply.setTimestamp(LocalDateTime.now());
-        if (normalizedCharacter.equals("petey no-nose")) {
-            aiReply.setAudio("/petey.wav");
-        }
-        messageRepo.save(aiReply);
-
-        // return all messages for this user and character
-        return messageRepo.findByUserIdAndCharacterName(userId, normalizedCharacter);
     }
 
-    // get all messages for a user
-    @GetMapping("/{userId}/{character}")
-    public List<Message> getMessages(@PathVariable Long userId, @PathVariable String character) {
-        String normalizedCharacter = normalizeCharacter(character);
-        List<Message> messages = messageRepo.findByUserIdAndCharacterName(userId, normalizedCharacter);
-        if (messages.isEmpty()) {
-            Message defaultMsg = new Message();
-            defaultMsg.setUserId(userId);
-            defaultMsg.setCharacterName(normalizedCharacter);
-            defaultMsg.setSender(normalizedCharacter);
-            switch (normalizedCharacter) {
-                case "sal":
-                    defaultMsg.setText("Ay, I saw your gig post. You need muscle or you need brains? Either way, I'm your guy. Let's talk business.");
-                    break;
-                case "sssteven":
-                    defaultMsg.setText("Hisss... I sssaw your gig. Doesss it involve ratsss? I can handle ratsss... for a price.");
-                    break;
-                case "grandma":
-                    defaultMsg.setText("Hi honey, can you help me with the remote again? I can't find the Netflix button. Love you!");
-                    break;
-                case "petey no-nose":
-                    defaultMsg.setText("🔊 [Voice message]");
-                    defaultMsg.setAudio("/petey.wav");
-                    break;
-                default:
-                    defaultMsg.setText("Hello!");
-            }
-            defaultMsg.setTimestamp(LocalDateTime.now());
-            messageRepo.save(defaultMsg);
-            messages = List.of(defaultMsg);
+} catch (Exception e) {
+    e.printStackTrace();
+}
+
+Message aiReply = new Message();
+aiReply.setUserId(userId);
+aiReply.setCharacterName(normalizedCharacter);
+aiReply.setText(aiReplyText);
+aiReply.setSender(normalizedCharacter);
+aiReply.setTimestamp(LocalDateTime.now());
+if (normalizedCharacter.equals("petey no-nose")) {
+    aiReply.setAudio("/petey.wav");
+}
+messageRepo.save(aiReply);
+
+// get all messages for this user and character from the database
+return messageRepo.findByUserIdAndCharacterName(userId, normalizedCharacter);
+}
+
+@GetMapping("/{userId}/{character}")
+public List<Message> getMessages(@PathVariable Long userId, @PathVariable String character) {
+    String normalizedCharacter = normalizeCharacter(character);
+    List<Message> messages = messageRepo.findByUserIdAndCharacterName(userId, normalizedCharacter);
+
+    if (messages.isEmpty()) {
+        Message defaultMsg = new Message();
+        defaultMsg.setUserId(userId);
+        defaultMsg.setCharacterName(normalizedCharacter);
+        defaultMsg.setSender(normalizedCharacter);
+
+        switch (normalizedCharacter) {
+            case "sal":
+                defaultMsg.setText("Ay, I saw your gig post. You need muscle or you need brains? Either way, I'm your guy. Let's talk business.");
+                break;
+            case "sssteven":
+                defaultMsg.setText("Hisss... I sssaw your gig. Doesss it involve ratsss? I can handle ratsss... for a price.");
+                break;
+            case "grandma":
+                defaultMsg.setText("Hi honey, can you help me with the remote again? I can't find the Netflix button. Love you!");
+                break;
+            case "petey no-nose":
+                defaultMsg.setText("🔊 [Voice message]");
+                defaultMsg.setAudio("/petey.wav");
+                break;
+            default:
+                defaultMsg.setText("Hello!");
         }
-        return messages;
-    }
+        defaultMsg.setTimestamp(LocalDateTime.now());
+        messageRepo.save(defaultMsg);
+        messages = List.of(defaultMsg);
 
-    // update a message
-    @PutMapping("/{id}")
-    public Message updateMessage(@PathVariable Long id, @RequestBody Message updatedMsg) {
-        Message msg = messageRepo.findById(id).orElseThrow();
-        msg.setText(updatedMsg.getText());
-        msg.setSender(updatedMsg.getSender());
-        msg.setTimestamp(updatedMsg.getTimestamp());
-        return messageRepo.save(msg);
     }
+    return messages;
 
-    // delete a message
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteMessage(@PathVariable Long id, @RequestParam String username) {
-        User user = userRepo.findByUsername(username);
-        if (user == null || !"ADMIN".equals(user.getRole())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only admins can delete messages.");
-        }
-        messageRepo.deleteById(id);
-        return ResponseEntity.ok().build();
+}
+
+// update a message by id
+@PutMapping("/{id}")
+public Message updateMessage(@PathVariable Long id, @RequestBody Message updatedMsg) {
+    Message msg = messageRepo.findById(id).orElseThrow();
+    msg.setText(updatedMsg.getText());
+    msg.setSender(updatedMsg.getSender());
+    msg.setTimestamp(updatedMsg.getTimestamp());
+    return messageRepo.save(msg);
+}
+
+// only admins can delete messages
+@DeleteMapping("/{id}")
+public ResponseEntity<?> deleteMessage(@PathVariable Long id, @RequestParam String username) {
+    User user = userRepo.findByUsername(username);
+
+    if (user == null || !"ADMIN".equals(user.getRole())) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only admins can delete messages.");
     }
+    messageRepo.deleteById(id);
+    return ResponseEntity.ok().build();
+}
 
-    // reset chat for a user and character
+// reset chat for a user and character, keeping only the default message
 @DeleteMapping("/reset/{userId}/{character}")
 public ResponseEntity<?> resetChat(@PathVariable Long userId, @PathVariable String character) {
     String normalizedCharacter = normalizeCharacter(character);
 
-    // get the default message text and audio for this character
     String defaultText;
     String defaultAudio = null;
     switch (normalizedCharacter) {
@@ -196,10 +198,9 @@ public ResponseEntity<?> resetChat(@PathVariable Long userId, @PathVariable Stri
             defaultText = "Hello!";
     }
 
-    // find all messages for this user and character
     List<Message> messages = messageRepo.findByUserIdAndCharacterName(userId, normalizedCharacter);
 
-    // find the oldest message that matches the default (text and audio if needed)
+    // find the oldest default message
     Message defaultMsg = null;
     for (Message m : messages) {
         boolean isDefault = defaultText.equals(m.getText());
@@ -218,7 +219,7 @@ public ResponseEntity<?> resetChat(@PathVariable Long userId, @PathVariable Stri
         }
     }
 
-    // if there was no default message, insert it
+    // insert default message if none exists
     if (defaultMsg == null) {
         Message newDefault = new Message();
         newDefault.setUserId(userId);
@@ -235,20 +236,19 @@ public ResponseEntity<?> resetChat(@PathVariable Long userId, @PathVariable Stri
     return ResponseEntity.ok().build();
 }
 
-    // this helper turns the display name into the id for gemini
-    private String getCharacterId(String character) {
-        if (character == null) return "sal";
-        switch (character.trim().toLowerCase()) {
-            case "sal":
-                return "sal";
-            case "sssteven":
-                return "sssteven";
-            case "grandma":
-                return "grandma";
-            case "petey no-nose":
-                return "petey";
-            default:
-                return "sal";
-        }
+// map display name to Gemini character id
+private String getCharacterId(String character) {
+    if (character == null) return "sal";
+    switch (character.trim().toLowerCase()) {
+        case "sal":
+            return "sal";
+        case "sssteven":
+            return "sssteven";
+        case "grandma":
+            return "grandma";
+        case "petey no-nose":
+            return "petey";
+        default:
+            return "sal";
     }
-}
+}}

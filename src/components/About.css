@@ -1,4 +1,3 @@
-/* Layout for the About section */
 .about-container {
   display: flex;
   height: calc(100vh - 100px);
@@ -9,14 +8,12 @@
   gap: 20px;
 }
 
-/* This adjusts the size of the logo*/
 .about-logo {
   max-width: 400px;
   width: 100%;
   height: auto;
 }
 
-/* Info box styling */
 .about-box {
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 20px; 
