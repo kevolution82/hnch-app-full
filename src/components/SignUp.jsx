@@ -63,7 +63,7 @@ const validate = () => {
   return newErrors;
 };
 
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validate();
     setErrors(newErrors);
@@ -76,27 +76,29 @@ const validate = () => {
       setModal({ show: true, message: msg.trim() });
       return;
     }
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    users.push({
-      username: form.username,
-      password: form.password,
-      email: form.email,
-      fullName: form.fullName,
-      organization: form.organization,
-      aliases: form.aliases,
-      birthdate: form.birthdate
-  });
-  localStorage.setItem('users', JSON.stringify(users));
-  localStorage.setItem('userProfile', JSON.stringify({
-    username: form.username,
-    fullName: form.fullName,
-    email: form.email,
-    organization: form.organization,
-    aliases: form.aliases,
-    birthdate: form.birthdate,
-    avatar: 'https://static.wixstatic.com/media/7a4abc_a01c97c757434c33b4c1b7777e4a4934~mv2.png'
-  }));
-  setModal({ show: true, message: 'Account created! Please check ya email to confirm!' });
+    try {
+      const res = await fetch('http://localhost:8080/api/users/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: form.username,
+          password: form.password,
+          email: form.email,
+          fullName: form.fullName,
+          organization: form.organization,
+          aliases: form.aliases,
+          birthdate: form.birthdate,
+        }),
+      });
+      if (res.ok) {
+        setModal({ show: true, message: 'Account created! Please check ya email to confirm!' });
+      } else {
+        setModal({ show: true, message: 'Registration failed. Username may already exist, chief.' });
+      }
+    } catch (err) {
+      setModal({ show: true, message: 'Registration failed. Please try again.' });
+    }
+  };
 };
 
   return (
@@ -203,6 +205,5 @@ const validate = () => {
       )}
     </div>
   );
-}
 
 export default SignUp;

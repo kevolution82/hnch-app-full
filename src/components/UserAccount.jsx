@@ -38,18 +38,18 @@ const demoChats = [
   },
 ];
 
-function getInitialProfile(userData) {
-  const stored = JSON.parse(localStorage.getItem('userProfile') || '{}');
+const [form, setForm] = useState(() => {
+  const user = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
   return {
-    fullName: stored.fullName || userData?.fullName || '',
-    username: stored.username || userData?.username || '',
-    email: stored.email || userData?.email || '',
-    organization: stored.organization || userData?.organization || '',
-    aliases: stored.aliases || userData?.aliases || '',
-    birthdate: stored.birthdate || userData?.birthdate || '',
-    avatar: stored.avatar || userData?.avatar || defaultAvatar,
+    fullName: user.fullName || '',
+    username: user.username || '',
+    email: user.email || '',
+    organization: user.organization || '',
+    aliases: user.aliases || '',
+    birthdate: user.birthdate || '',
+    avatar: user.avatar || defaultAvatar,
   };
-}
+});
 
 function UserAccount({
   userData,
@@ -63,27 +63,17 @@ function UserAccount({
   const [modal, setModal] = useState({ show: false, message: '' }); 
   const navigate = useNavigate(); 
   const [editMode, setEditMode] = useState(false); 
-
-  // only initialize from localStorage/userData ONCE
-  const [form, setForm] = useState(() => getInitialProfile(userData));
-  const [activeTab, setActiveTab] = useState(() =>
-    localStorage.getItem('accountActiveTab') || initialTabs[0]
-  );
+  const [activeTab, setActiveTab] = useState(initialTabs[0]);
   const [avatarFile, setAvatarFile] = useState(null);
   const [errors, setErrors] = useState({});
   const [selectedChat, setSelectedChat] = useState(chats?.[0]?.id || null);
   const [messageInput, setMessageInput] = useState('');
   const [messages, setMessages] = useState([]);
 
-  // save which tab is active
-  useEffect(() => {
-    localStorage.setItem('accountActiveTab', activeTab);
-  }, [activeTab]);
-
   // load messages for selected chat wh en messaging tab is active
 useEffect(() => {
   if (activeTab !== 'Messaging' || !selectedChat) return;
-  const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+  const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
   const userId = loggedInUser.id || 1;
 
   // fetches messages for this user and chat from the backend
@@ -101,9 +91,9 @@ useEffect(() => {
       reader.onload = ev => {
         setForm(prev => {
           const updated = { ...prev, avatar: ev.target.result };
-          // save avatar to localStorage immediately
-          const stored = JSON.parse(localStorage.getItem('userProfile') || '{}');
-          localStorage.setItem('userProfile', JSON.stringify({ ...stored, avatar: ev.target.result }));
+          // update avatar in sessionStorage immediately
+          const user = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
+          sessionStorage.setItem('loggedInUser', JSON.stringify({ ...user, avatar: ev.target.result }));
           return updated;
         });
         setAvatarFile(file);
@@ -121,7 +111,7 @@ useEffect(() => {
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!messageInput.trim() || !selectedChat) return;
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+    const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
     const userId = loggedInUser.id || 1;
     const chat = chats.find(c => c.id === selectedChat);
     const character = chat ? chat.id : selectedChat;
@@ -170,34 +160,49 @@ useEffect(() => {
     setErrors({});
   };
 
-  // profile changes are saved both to the backend (PUT) and to localStorage
   const handleSave = async e => {
   e.preventDefault();
   const newErrors = validate();
   setErrors(newErrors);
   if (Object.keys(newErrors).length > 0) return;
 
-  await fetch(`http://localhost:8080/api/users/${form.username}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(form),
-  });
-
-  localStorage.setItem('userProfile', JSON.stringify(form));
-  const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
-  localStorage.setItem('loggedInUser', JSON.stringify({ ...loggedInUser, ...form }));
-  setEditMode(false);
+    try {
+    const res = await fetch(`http://localhost:8080/api/users/${form.username}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    });
+    if (res.ok) {
+      const updatedUser = await res.json();
+      sessionStorage.setItem('loggedInUser', JSON.stringify(updatedUser));
+      setForm(updatedUser);
+      setEditMode(false);
+    } else {
+      setModal({ show: true, message: 'Failed to update profile.' });
+    }
+  } catch (err) {
+    setModal({ show: true, message: 'Failed to update profile.' });
+  }
 };
 
   const handleCancel = () => {
-    setForm(getInitialProfile(userData));
+    const user = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
+    setForm({
+      fullName: user.fullName || '',
+      username: user.username || '',
+      email: user.email || '',
+      organization: user.organization || '',
+      aliases: user.aliases || '',
+      birthdate: user.birthdate || '',
+      avatar: user.avatar || defaultAvatar,
+    });
     setEditMode(false);
     setErrors({});
   };
 
-  // only users with ADMIN role (from localStorage) see the delete button for messages
+  // only users with ADMIN role (from sessionStorage) see the delete button for messages
   const handleDelete = (msgId) => {
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+    const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
     fetch(`http://localhost:8080/api/messages/${msgId}?username=${loggedInUser.username}`, {
       method: 'DELETE'
     })
@@ -210,7 +215,7 @@ useEffect(() => {
       });
   };
 
-  // logging out clears the user from localStorage and navigates to login page
+  // logging out clears the user from sessionStorage and navigates to login page
   const handleLogout = () => {
     setModal({
       show: true,
@@ -220,7 +225,7 @@ useEffect(() => {
 
   const handleModalConfirm = () => {
     if (modal.message.startsWith("Alright fine, you're logged out. Just don't talk about anything you've seen here. Got it?")) {
-      localStorage.removeItem('loggedInUser');
+      sessionStorage.removeItem('loggedInUser');
       setModal({ show: false, message: '' });
       navigate('/login', { replace: true });
     } else {
@@ -230,7 +235,7 @@ useEffect(() => {
 
   // admin status
   const isAdmin = (() => {
-    const user = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+    const user = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
     return user.role === 'ADMIN';
   })();
 

@@ -8,28 +8,25 @@ function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  // handles login form submission and checks credentials against localStorage
-  const handleSubmit = (e) => {
+  // handles login form submission and checks credentials against sessionStorage
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    // find a user with matching username and password
-    const user = users.find(u => u.username === username && u.password === password);
-    if (user) {
-      localStorage.setItem('loggedInUser', JSON.stringify(user));
-      // update or create user profile in localStorage, keeping avatar if present
-      const existingProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
-      const avatar =
-        existingProfile.username === user.username && existingProfile.avatar
-          ? existingProfile.avatar
-          : user.avatar || 'https://static.wixstatic.com/media/7a4abc_a01c97c757434c33b4c1b7777e4a4934~mv2.png';
-      localStorage.setItem(
-        'userProfile',
-        JSON.stringify({ ...existingProfile, ...user, avatar })
-      );
-      navigate('/account');
-    } else {
-      // show error if login fails
-      setError('Invalid username or password');
+    setError('');
+    try {
+      const res = await fetch('http://localhost:8080/api/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      if (res.ok) {
+        const user = await res.json();
+        sessionStorage.setItem('loggedInUser', JSON.stringify(user));
+        navigate('/account');
+      } else {
+        setError('Invalid username or password');
+      }
+    } catch (err) {
+      setError('Login failed. Please try again.');
     }
   };
 
