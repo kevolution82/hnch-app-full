@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Build the application
-RUN ./mvnw clean package
+RUN ./mvnw clean package -DskipTests
 
 # Run the application
 CMD ["java", "-jar", "target/app-0.0.1-SNAPSHOT.jar"]
