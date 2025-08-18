@@ -7,6 +7,8 @@ import com.hnchapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -16,34 +18,40 @@ public class UserController {
     @Autowired
     private UserRepository userRepo;
 
-    // sign up a new user
+    // use BCrypt for password hashing
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    // sign up a new user (hash password before saving)
     @PostMapping("/register")
     public User register(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepo.save(user);
     }
 
-    // backend checks if user exists and password matches on login
+    // backend checks if user exists and password matches on login (using BCrypt)
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User login) {
         User user = userRepo.findByUsername(login.getUsername());
-        if (user != null && user.getPassword().equals(login.getPassword())) {
+        if (user != null && passwordEncoder.matches(login.getPassword(), user.getPassword())) {
             return ResponseEntity.ok(user);
         }
-        return ResponseEntity.status(401).body("invalid credentials"); // sends error if login fails
+        return ResponseEntity.status(401).body("invalid credentials");
     }
 
+    // update user info (rehash password if changed)
     @PutMapping("/{username}")
     public ResponseEntity<?> updateUser(@PathVariable String username, @RequestBody User updatedUser) {
         User user = userRepo.findByUsername(username);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
-        // only update fields that exist in your user entity
         user.setEmail(updatedUser.getEmail());
-        user.setPassword(updatedUser.getPassword());
+        // only hash if password is changed and not empty
+        if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        }
         user.setRole(updatedUser.getRole());
         userRepo.save(user);
         return ResponseEntity.ok(user);
     }
-    
 }

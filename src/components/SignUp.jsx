@@ -99,7 +99,6 @@ const validate = () => {
       setModal({ show: true, message: 'Registration failed. Please try again.' });
     }
   };
-};
 
   return (
     <div className="login-container">
