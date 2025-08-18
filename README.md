@@ -87,7 +87,6 @@ HNCH exists because your operation deserves better than amateurs and secondhand 
 - **Admin panel:** More robust admin features for managing users and gigs.
 - **Mobile polish:** Responsive design is present but could be improved for smaller screens.
 - **Accessibility:** Add ARIA labels and improve keyboard navigation.
-- **Deployment:** Add Dockerfile and deployment scripts for production.
 - **Public API integration:** Optionally fetch data from a public API for extra features.
 
 ------

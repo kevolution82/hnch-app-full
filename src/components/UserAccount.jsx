@@ -38,7 +38,15 @@ const demoChats = [
   },
 ];
 
-const [form, setForm] = useState(() => {
+function UserAccount({
+  userData,
+  chats = demoChats,
+  myGoons = [],
+  onRemove,
+  updateWallet,
+  wallet
+}) {
+  const [form, setForm] = useState(() => {
   const user = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
   return {
     fullName: user.fullName || '',
@@ -50,15 +58,6 @@ const [form, setForm] = useState(() => {
     avatar: user.avatar || defaultAvatar,
   };
 });
-
-function UserAccount({
-  userData,
-  chats = demoChats,
-  myGoons = [],
-  onRemove,
-  updateWallet,
-  wallet
-}) {
 
   const [modal, setModal] = useState({ show: false, message: '' }); 
   const navigate = useNavigate(); 
