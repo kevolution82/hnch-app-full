@@ -204,5 +204,6 @@ const validate = () => {
       )}
     </div>
   );
+}
 
 export default SignUp;
