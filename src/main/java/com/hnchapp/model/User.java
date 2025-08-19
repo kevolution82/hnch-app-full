@@ -14,6 +14,10 @@ public class User {
     private String password;
     private String email;
     private String role = "USER";
+    private String fullName;
+    private String organization;
+    private String aliases;
+    private String birthdate;
 
     public User() {}
 
@@ -51,5 +55,33 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getOrganization() {
+        return organization;
+    }
+    public void setOrganization(String organization) {
+        this.organization = organization;
+    }
+
+    public String getAliases() {
+        return aliases;
+    }
+    public void setAliases(String aliases) {
+        this.aliases = aliases;
+    }
+
+    public String getBirthdate() {
+        return birthdate;
+    }
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
     }
 }
