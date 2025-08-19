@@ -28,7 +28,7 @@ public class UserController {
     public ResponseEntity<?> register(@RequestBody User user) {
         try {
             if (userRepo.findByUsername(user.getUsername()) != null) {
-                // if username already exists
+                // if username already exists 
                 return ResponseEntity.status(409).body(Collections.singletonMap("error", "Username already exists!"));
             }
             user.setPassword(passwordEncoder.encode(user.getPassword()));
