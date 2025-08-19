@@ -45,10 +45,10 @@ public ResponseEntity<?> login(@RequestBody User login) {
     try {
         User user = userRepo.findByUsername(login.getUsername());
         if (user == null) {
-            return ResponseEntity.status(401).body("invalid credentials");
+            return ResponseEntity.status(401).body(Collections.singletonMap("error", "invalid credentials"));
         }
         if (!passwordEncoder.matches(login.getPassword(), user.getPassword())) {
-            return ResponseEntity.status(401).body("invalid credentials");
+            return ResponseEntity.status(401).body(Collections.singletonMap("error", "invalid credentials"));
         }
         UserDTO safeUser = new UserDTO();
         safeUser.setId(user.getId());
