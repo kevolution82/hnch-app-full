@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@CrossOrigin(origins = {"http://localhost:5173", "https://hnch-app-full-4.onrender.com"})
+@CrossOrigin(origins = {"http://localhost:5173", "https://hnch-app-full-4.onrender.com", "https://hnch-app.netlify.app"})
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
