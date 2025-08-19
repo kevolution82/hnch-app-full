@@ -84,4 +84,7 @@ public class User {
     public void setBirthdate(String birthdate) {
         this.birthdate = birthdate;
     }
+    public void setId(Long id) {
+    this.id = id;
+}
 }
