@@ -39,7 +39,7 @@ public class UserController {
         }
     }
 
-    // backend checks if user exists and password matches on login (using BCrypt)
+    // backend checks if user exists and password matches on login (using BCrypt) 
 @PostMapping("/login")
 public ResponseEntity<?> login(@RequestBody User login) {
     try {
