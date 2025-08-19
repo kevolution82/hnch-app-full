@@ -3,6 +3,7 @@ package com.hnchapp.controller;
 // user controller for handling sign up and login
 
 import com.hnchapp.model.User;
+import com.hnchapp.model.UserDTO;
 import com.hnchapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody User login) {
     User user = userRepo.findByUsername(login.getUsername());
     if (user != null && passwordEncoder.matches(login.getPassword(), user.getPassword())) {
-        User safeUser = new User();
+        UserDTO safeUser = new UserDTO();
         safeUser.setId(user.getId());
         safeUser.setUsername(user.getUsername());
         safeUser.setEmail(user.getEmail());
