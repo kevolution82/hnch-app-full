@@ -1,7 +1,10 @@
 C:\Users\altvb\hnch-app2\src\main\java\com\hnchapp\AppApplication.java
+C:\Users\altvb\hnch-app2\src\main\java\com\hnchapp\config\CorsConfig.java
+C:\Users\altvb\hnch-app2\src\main\java\com\hnchapp\config\SecurityConfig.java
 C:\Users\altvb\hnch-app2\src\main\java\com\hnchapp\controller\MessageController.java
 C:\Users\altvb\hnch-app2\src\main\java\com\hnchapp\controller\UserController.java
 C:\Users\altvb\hnch-app2\src\main\java\com\hnchapp\model\Message.java
 C:\Users\altvb\hnch-app2\src\main\java\com\hnchapp\model\User.java
+C:\Users\altvb\hnch-app2\src\main\java\com\hnchapp\model\UserDTO.java
 C:\Users\altvb\hnch-app2\src\main\java\com\hnchapp\repository\MessageRepository.java
 C:\Users\altvb\hnch-app2\src\main\java\com\hnchapp\repository\UserRepository.java
