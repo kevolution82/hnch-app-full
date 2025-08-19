@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5173", "https://hnch-app-full-4.onrender.com"})
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -46,11 +46,14 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         user.setEmail(updatedUser.getEmail());
-        // only hash if password is changed and not empty
         if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
         }
         user.setRole(updatedUser.getRole());
+        user.setFullName(updatedUser.getFullName());
+        user.setOrganization(updatedUser.getOrganization());
+        user.setAliases(updatedUser.getAliases());
+        user.setBirthdate(updatedUser.getBirthdate());
         userRepo.save(user);
         return ResponseEntity.ok(user);
     }
