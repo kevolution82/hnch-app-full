@@ -32,8 +32,13 @@ public class UserController {
     // backend checks if user exists and password matches on login (using BCrypt)
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User login) {
-    User user = userRepo.findByUsername(login.getUsername());
-    if (user != null && passwordEncoder.matches(login.getPassword(), user.getPassword())) {
+        User user = userRepo.findByUsername(login.getUsername());
+        if (user == null) {
+            return ResponseEntity.status(401).body("invalid credentials");
+        }
+        if (!passwordEncoder.matches(login.getPassword(), user.getPassword())) {
+            return ResponseEntity.status(401).body("invalid credentials");
+        }
         UserDTO safeUser = new UserDTO();
         safeUser.setId(user.getId());
         safeUser.setUsername(user.getUsername());
@@ -45,8 +50,6 @@ public class UserController {
         safeUser.setBirthdate(user.getBirthdate());
         return ResponseEntity.ok(safeUser);
     }
-    return ResponseEntity.status(401).body("invalid credentials");
-}
 
     // update user info (rehash password if changed)
     @PutMapping("/{username}")
