@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import java.util.Collections;
 
 @CrossOrigin(origins = {"http://localhost:5173", "https://hnch-app-full-4.onrender.com", "https://hnch-app.netlify.app"})
 @RestController
@@ -24,9 +25,18 @@ public class UserController {
 
     // sign up a new user (hash password before saving)
     @PostMapping("/register")
-    public User register(@RequestBody User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepo.save(user);
+    public ResponseEntity<?> register(@RequestBody User user) {
+        try {
+            if (userRepo.findByUsername(user.getUsername()) != null) {
+                // if username already exists
+                return ResponseEntity.status(409).body(Collections.singletonMap("error", "Username already exists!"));
+            }
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            User saved = userRepo.save(user);
+            return ResponseEntity.ok(saved);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Collections.singletonMap("error", "Registration failed!"));
+        }
     }
 
     // backend checks if user exists and password matches on login (using BCrypt)
@@ -51,7 +61,7 @@ public ResponseEntity<?> login(@RequestBody User login) {
         safeUser.setBirthdate(user.getBirthdate());
         return ResponseEntity.ok(safeUser);
     } catch (Exception e) {
-        return ResponseEntity.status(500).body("{\"error\":\"Internal server error\"}");
+        return ResponseEntity.status(401).body(Collections.singletonMap("error", "Internal server error"));
     }
 }
 
