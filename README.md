@@ -38,15 +38,15 @@ HNCH exists because your operation deserves better than amateurs and secondhand 
    ```
 
 2. **Set up the MySQL database**
-   - Install MySQL and create a database named `hnchdb`.
-   - Update `src/main/resources/application.properties` with your MySQL username and password.
-   - The app will auto-create tables and seed initial users from `data.sql`.
+   - The database is hosted on Aiven (MySQL).
+   - Environment variables for database connection (`JDBC_DATABASE_URL`, `JDBC_DATABASE_USERNAME`, `JDBC_DATABASE_PASSWORD`) are set in the Render backend dashboard.
+   - The app will auto-create tables and seed initial users from `data.sql` on first run.
 
-3. **Start the Spring Boot backend**
-   ```sh
-   cd hnch-app2
+3. **Backend Deployment**
+   - The backend is deployed on Render.
+   - All environment variables (database, Gemini API, etc.) are configured in the Render dashboard.
+   - To run locally for development, use this:
    mvn spring-boot:run
-   ```
 
 4. **Set up the Gemini AI server**
    - Go to `src/components/gemini-server.js`
@@ -60,11 +60,17 @@ HNCH exists because your operation deserves better than amateurs and secondhand 
      ```
 
 5. **Start the React frontend**
-   ```sh
+   ``` 
+   The frontend is deployed on [https://hnch-app.netlify.app/](https://hnch-app.netlify.app/)
+   - To run locally for development, use this:
    npm install
    npm run dev
-   ```
-   - The app will be available at [http://localhost:5173](http://localhost:5173)
+
+6. **Deployment Section**
+   - Database: Aiven (MySQL)
+   - Backend: Render (Java Spring Boot)
+   - Gemini AI Server: Render (Node.js)
+   - Frontend: Netlify (React + Vite)
 
 ------
 
@@ -82,7 +88,7 @@ HNCH exists because your operation deserves better than amateurs and secondhand 
 
 ## Unsolved Problems & Future Features
 
-- **Backend authentication:** Currently, login/logout is handled in the frontend only (localStorage). Adding JWT or session-based authentication would improve security.
+- **Backend authentication:** Login/logout is handled with backend credential checks and sessionStorage in the frontend. Adding JWT or session-based authentication would improve security.
 - **Password hashing:** Passwords are stored in plain text; should use BCrypt or similar.
 - **Admin panel:** More robust admin features for managing users and gigs.
 - **Mobile polish:** Responsive design is present but could be improved for smaller screens.

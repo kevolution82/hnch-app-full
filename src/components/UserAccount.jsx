@@ -68,7 +68,13 @@ function UserAccount({
   }
 }, [navigate]);
   const [editMode, setEditMode] = useState(false); 
-  const [activeTab, setActiveTab] = useState(initialTabs[0]);
+  const [activeTab, setActiveTab] = useState(() => {
+  return sessionStorage.getItem('activeTab') || initialTabs[0];
+  });
+
+  useEffect(() => {
+  sessionStorage.setItem('activeTab', activeTab);
+  }, [activeTab]);
   const [avatarFile, setAvatarFile] = useState(null);
   const [errors, setErrors] = useState({});
   const chatList = React.useMemo(() => (chats && chats.length > 0 ? chats : demoChats), [chats]);
