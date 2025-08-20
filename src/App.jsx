@@ -139,6 +139,7 @@ function App() {
             element={
               <RequireAuth>
                 <UserAccount
+                  userData={JSON.parse(sessionStorage.getItem('loggedInUser'))}
                   myGoons={myGoons}
                   onRemove={handleRemove}
                   updateWallet={updateWallet}

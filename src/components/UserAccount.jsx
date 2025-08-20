@@ -61,6 +61,12 @@ function UserAccount({
 
   const [modal, setModal] = useState({ show: false, message: '' }); 
   const navigate = useNavigate(); 
+  useEffect(() => {
+  const user = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
+  if (!user || !user.username) {
+    navigate('/login');
+  }
+}, [navigate]);
   const [editMode, setEditMode] = useState(false); 
   const [activeTab, setActiveTab] = useState(initialTabs[0]);
   const [avatarFile, setAvatarFile] = useState(null);
