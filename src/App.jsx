@@ -71,8 +71,8 @@ function App() {
       )}
 
       {/* shows wallet and avatar if user is logged in */}
-      {localStorage.getItem('loggedInUser') && (() => {
-        const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+      {sessionStorage.getItem('loggedInUser') && (() => {
+        const userProfile = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
         return (
           <div className="wallet-ui">
             {userProfile.avatar && (
