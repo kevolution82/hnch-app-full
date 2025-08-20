@@ -71,7 +71,12 @@ function UserAccount({
   const [activeTab, setActiveTab] = useState(initialTabs[0]);
   const [avatarFile, setAvatarFile] = useState(null);
   const [errors, setErrors] = useState({});
-  const [selectedChat, setSelectedChat] = useState(chats?.[0]?.id || null);
+  const chatList = React.useMemo(() => (chats && chats.length > 0 ? chats : demoChats), [chats]);
+  const [selectedChat, setSelectedChat] = useState(chatList[0]?.id || null);
+  
+  useEffect(() => {
+    setSelectedChat(chatList[0]?.id || null);
+  }, [chatList]);
   const [messageInput, setMessageInput] = useState('');
   const [messages, setMessages] = useState([]);
 
@@ -81,23 +86,19 @@ useEffect(() => {
   const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
   const userId = loggedInUser.id || 1;
 
-useEffect(() => {
-  if (activeTab === 'Messaging') {
-    const chat = chats.find(c => c.id === selectedChat);
-    if (chat) {
-      setMessages(chat.messages || []);
-    } else {
-      setMessages([]);
-    }
+  const chat = chatList.find(c => c.id === selectedChat);
+
+  if (!chat) {
+    setMessages([]);
+    return;
   }
-}, [activeTab, selectedChat, chats]);
 
   // fetches messages for this user and chat from the backend
-  fetch(`http://localhost:8080/api/messages/${userId}/${selectedChat}`)
-    .then(res => res.ok ? res.json() : [])
-    .then(data => setMessages(data))
-    .catch(() => setMessages([]));
-}, [activeTab, selectedChat]);
+  fetch(`https://hnch-app-full-4.onrender.com/api/messages/${userId}/${selectedChat}`)
+    .then(res => res.ok ? res.json() : chat.messages || [])
+    .then(data => setMessages(data && data.length ? data : (chat.messages || [])))
+    .catch(() => setMessages(chat.messages || []));
+}, [activeTab, selectedChat, chatList]);
 
   // does the avatar upload
   const handleAvatarChange = e => {
@@ -134,7 +135,7 @@ useEffect(() => {
   
     try {
 
-      const res = await fetch('http://localhost:8080/api/messages', {
+      const res = await fetch('https://hnch-app-full-4.onrender.com/api/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -146,7 +147,7 @@ useEffect(() => {
   
       if (res.ok) {
         // fetch updated messages after sending
-        const response = await fetch(`http://localhost:8080/api/messages/${userId}/${character}`);
+        const response = await fetch(`https://hnch-app-full-4.onrender.com/api/messages/${userId}/${character}`);
         const updatedMessages = response.ok ? await response.json() : [];
         setMessages(updatedMessages);
         setMessageInput(''); // clear the input box
@@ -227,7 +228,7 @@ useEffect(() => {
   // only users with ADMIN role (from sessionStorage) see the delete button for messages
   const handleDelete = (msgId) => {
     const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
-    fetch(`http://localhost:8080/api/messages/${msgId}?username=${loggedInUser.username}`, {
+    fetch(`https://hnch-app-full-4.onrender.com/api/messages/${msgId}?username=${loggedInUser.username}`, {
       method: 'DELETE'
     })
       .then(res => {
@@ -263,7 +264,6 @@ useEffect(() => {
     return user.role === 'ADMIN';
   })();
 
-  const chatList = chats && chats.length > 0 ? chats : demoChats;
   const currentChat = chatList.find(chat => chat.id === selectedChat);
 
   return (
