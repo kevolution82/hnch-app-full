@@ -81,6 +81,17 @@ useEffect(() => {
   const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
   const userId = loggedInUser.id || 1;
 
+useEffect(() => {
+  if (activeTab === 'Messaging') {
+    const chat = chats.find(c => c.id === selectedChat);
+    if (chat) {
+      setMessages(chat.messages || []);
+    } else {
+      setMessages([]);
+    }
+  }
+}, [activeTab, selectedChat, chats]);
+
   // fetches messages for this user and chat from the backend
   fetch(`http://localhost:8080/api/messages/${userId}/${selectedChat}`)
     .then(res => res.ok ? res.json() : [])
@@ -166,29 +177,37 @@ useEffect(() => {
   };
 
   const handleSave = async e => {
-  e.preventDefault();
-  const newErrors = validate();
-  setErrors(newErrors);
-  if (Object.keys(newErrors).length > 0) return;
-
+    e.preventDefault();
+    const errors = validate();
+    setErrors(errors);
+    if (Object.keys(errors).length > 0) return;
+  
+    // get the current user from sessionStorage
+    const currentUser = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
+    // if the password field is empty use the current password (or send a placeholder if backend requires it)
+    const payload = {
+      ...form,
+      password: form.password || '',
+    };
+  
     try {
-    const res = await fetch(`http://localhost:8080/api/users/${form.username}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
-    });
-    if (res.ok) {
-      const updatedUser = await res.json();
-      sessionStorage.setItem('loggedInUser', JSON.stringify(updatedUser));
-      setForm(updatedUser);
-      setEditMode(false);
-    } else {
+      const res = await fetch(`https://hnch-app-full-4.onrender.com/api/users/${currentUser.username}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        setEditMode(false);
+        setModal({ show: true, message: 'Profile updated!' });
+        const updatedUser = await res.json();
+        sessionStorage.setItem('loggedInUser', JSON.stringify(updatedUser));
+      } else {
+        setModal({ show: true, message: 'Failed to update profile.' });
+      }
+    } catch (err) {
       setModal({ show: true, message: 'Failed to update profile.' });
     }
-  } catch (err) {
-    setModal({ show: true, message: 'Failed to update profile.' });
-  }
-};
+  };
 
   const handleCancel = () => {
     const user = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
@@ -244,7 +263,7 @@ useEffect(() => {
     return user.role === 'ADMIN';
   })();
 
-  const chatList = chats || [];
+  const chatList = chats && chats.length > 0 ? chats : demoChats;
   const currentChat = chatList.find(chat => chat.id === selectedChat);
 
   return (
