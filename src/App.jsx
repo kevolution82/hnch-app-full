@@ -30,8 +30,8 @@ function App() {
 
   // requireauth redirects to login if user is not authenticated
   function RequireAuth({ children }) {
-    const loggedInUser = localStorage.getItem('loggedInUser');
-    return loggedInUser ? children : <Navigate to="/login" replace />;
+  const loggedInUser = sessionStorage.getItem('loggedInUser');
+  return loggedInUser ? children : <Navigate to="/login" replace />;
   }
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -139,7 +139,6 @@ function App() {
             element={
               <RequireAuth>
                 <UserAccount
-                  userData={JSON.parse(sessionStorage.getItem('loggedInUser'))}
                   myGoons={myGoons}
                   onRemove={handleRemove}
                   updateWallet={updateWallet}
