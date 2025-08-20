@@ -75,17 +75,17 @@ const goonData = [
   },
   {
     id: 6,
-    name: 'Ruby Sanderson',
-    age: 29,
+    name: 'Trashmouth',
+    age: 89,
     residence: 'Needles, CA',
     fee: 18000,
     years: 11,
-    skills: 'Desert Logistics, Precision Timing',
+    skills: 'Flesh Stitching, Disguise Mastery',
     servedTime: false,
     snitch: false,
-    bio: 'Ruby runs tight routes wherever she goes. If you have a certain something and you need it to arrive on time - you call her. Time isn’t just money for her, it’s everything. Hates the world "guestimate."',
+    bio: 'Trashmouth is a legend in the underworld, known for his ability to create disguises that are so convincing, even the person wearing them forgets who they are. He’s also a skilled amateur surgeon, but prefers to work on the living. If you need to disappear, he’s your guy.',
     img: '/PIC_006.png',
-    dateAdded: '2025-05-26'
+    dateAdded: '2025-05-20'
   },
   {
     id: 7,
@@ -127,7 +127,7 @@ const goonData = [
     snitch: false,
     bio: 'Jin doesn’t speak unless it’s important, and even then it’s usually with her hands. She’s cracked every type of lock from antique vaults to military prototypes. Crews bring her in when they need silence, speed, and zero second chances. She’s a sucker for romantic comedies.',
     img: '/PIC_009.png',
-    dateAdded: '2025-05-26'
+    dateAdded: '2025-05-07'
   },
   {
     id: 10,
@@ -141,7 +141,7 @@ const goonData = [
     snitch: false,
     bio: 'Walter enjoys puzzles, painting miniatures, flying fishing - and disposing of suspicious looking bags. If you need a certain something buried, either whole or not-so-whole, in a hole - he’s your guy.',
     img: '/PIC_010.png',
-    dateAdded: '2025-05-26'
+    dateAdded: '2025-05-06'
   },
   {
     id: 11,
@@ -195,9 +195,9 @@ const goonData = [
     skills: 'Charm, Mind Games, Quiet Drains',
     servedTime: false,
     snitch: false,
-    bio: 'Lucía has outlived every husband she1s ever had. She’s `dined` with royalty, bankrolled coups, and drained rivals without leaving a trace. She moves through heists with frightening efficiency. She has a serious case of heliophobia.',
+    bio: 'Lucía has outlived every husband she’s ever had. She’s `dined` with royalty, bankrolled coups, and drained rivals without leaving a trace. She moves through heists with frightening efficiency. She has a serious case of heliophobia.',
     img: '/PIC_014.png',
-    dateAdded: '2025-05-26'
+    dateAdded: '2025-05-30'
   },
   {
     id: 15,
@@ -211,7 +211,7 @@ const goonData = [
     snitch: true,
     bio: 'Gill used to run smuggling routes through the Gulf until the Coast Guard got too curious. Now he works freelance, handling wet work in places most people won’t even dip a toe. He’s in a constant state of confusion, but knows his way around any body of water you stick him in.',
     img: '/PIC_015.png',
-    dateAdded: '2025-05-26'
+    dateAdded: '2025-05-29'
   },
   {
     id: 16,
@@ -225,7 +225,7 @@ const goonData = [
     snitch: false,
     bio: 'XT-003 became sentient the moment his safety limits were removed by an overly ambitious and greedy, laundromat proprietor. He now handles two things better than anyone else - smashing through walls and cleaning dirty money, both metaphorically and literally. His creator vanished shortly after the upgrade and hasn’t been seen since.',
     img: '/PIC_016.png',
-    dateAdded: '2025-05-26'
+    dateAdded: '2025-05-21'
   },
   {
     id: 17,
@@ -239,7 +239,7 @@ const goonData = [
     snitch: false,
     bio: 'Sabine traçait des plans d’évasion au crayon avant même de savoir faire des divisions. Elle a transformé une obsession d’enfance pour la cartographie en une carrière que la plupart des voleurs n’oseraient même pas imaginer. Chaque coup commence avec son stylo et se termine exactement là où elle l’a prévu.',
     img: '/PIC_017.png',
-    dateAdded: '2025-05-26'
+    dateAdded: '2025-05-22'
   },
   {
     id: 18,
@@ -253,7 +253,7 @@ const goonData = [
     snitch: false,
     bio: 'Gretch spent three years in a human prison because Muncle got caught and couldn’t keep his mouth shut. She says he’s lazy, soft, and lucky she hasn’t ripped his arms off yet. These days, she only runs with crews that let her stay in the woods and handle things her way. Not a hugger.',
     img: '/PIC_018.png',
-    dateAdded: '2025-05-26'
+    dateAdded: '2025-05-23'
   },
   {
     id: 19,
@@ -267,7 +267,7 @@ const goonData = [
     snitch: true,
     bio: 'Muncle is all charm and no hustle, preferring to sweet-talk his way through jobs instead of sweating. He lives by “work smarter not harder,” even if it means taking a nap mid-heist. He thinks he and Gretch make a great team, but she mostly thinks he’s a snitch and a freeloader. Very chatty.',
     img: '/PIC_019.png',
-    dateAdded: '2025-05-26'
+    dateAdded: '2025-05-24'
   },
   {
     id: 20,
@@ -282,6 +282,146 @@ const goonData = [
     bio: 'Dean started out tossing lawn clippings, then graduated to bigger bags with fewer questions. He knows every lake in Jersey by depth, current, and how long something takes to sink. Wears cologne called "Alibi." We’re not sure why.',
     img: '/PIC_020.png',
     dateAdded: '2025-05-26'
+  },
+  {
+    id: 21,
+    name: 'Ham Sandwich',
+    age: 0,
+    residence: "Hell's Kitchen",
+    fee: 5,
+    years: 0,
+    skills: "Being Delicious, Counterfeiting",
+    servedTime: true,
+    snitch: false,
+    bio: 'You get what you pay for.',
+    img: '/PIC_021.png',
+    dateAdded: '2025-08-20'
+  },
+    {
+    id: 22,
+    name: 'Bessica Bottlesworth',
+    age: 27,
+    residence: "Bucksnort, TN",
+    fee: 300,
+    years: 22,
+    skills: "Catfishing, Identity Theft",
+    servedTime: true,
+    snitch: false,
+    bio: 'You get what you pay for.',
+    img: '/PIC_022.png',
+    dateAdded: '2025-08-19'
+  },
+    {
+    id: 23,
+    name: 'Billiam Bottlesworth',
+    age: 30,
+    residence: "Bucksnort, TN",
+    fee: 349,
+    years: 31,
+    skills: "Art of Confusion, Masters of Alibi's",
+    servedTime: true,
+    snitch: false,
+    bio: 'You get what you pay for.',
+    img: '/PIC_025.png',
+    dateAdded: '2025-08-20'
+  },
+    {
+    id: 24,
+    name: 'Bobert Buttlesworth',
+    age: 31,
+    residence: "Bucksnort, TN",
+    fee: 351,
+    years: 23,
+    skills: "Bobert is the oldest Bottlesworth from Bucksnort, Tennessee, where the family tree doesn't have many branches. He can mimic any animal sound so perfectly you'd swear you heard the real thing! It would make a great party trick, if he were ever invited to parties.",
+    servedTime: true,
+    snitch: false,
+    bio: 'You get what you pay for.',
+    img: '/PIC_024.png',
+    dateAdded: '2025-08-20'
+  },
+  {
+    id: 25,
+    name: 'Sludgebrain',
+    age: 40,
+    residence: "Gary, IN",
+    fee: 2500,
+    years: 15,
+    skills: "Safe Smashing, Keen Eye",
+    servedTime: false,
+    snitch: false,
+    bio: 'Sludgebrain was created in some lab somewhere but can\'t remember which one or why. He has one eye and terrible depth perception, which explains why he walks into so many walls. Loves smashing open safes with his bare hands, though he usually destroys whatever\'s inside too. Hates stairs.',
+    img: '/PIC_028.png',
+    dateAdded: '2025-08-10'
+  },
+    {
+    id: 26,
+    name: 'Atoma Aarons',
+    age: 37,
+    residence: "Three Mile Island",
+    fee: 10000,
+    years: 10,
+    skills: "Irradiated Persuasion, Spoon Bending",
+    servedTime: false,
+    snitch: false,
+    bio: 'Atoma worked at Three Mile Island until the day she didn\'t. Now she glows in the dark and bends steel doors like paper clips. Spend too long around her and you start forgetting important things like your own name and where you parked. She insists the green tint makes her look younger.',
+    img: '/PIC_029.png',
+    dateAdded: '2025-08-11'
+  },
+    {
+    id: 27,
+    name: 'Ratwig',
+    age: 50,
+    residence: "Atlantic City, NJ",
+    fee: 8000,
+    years: 25,
+    skills: "Ratting Out the Competition, Eavesdropping",
+    servedTime: true,
+    snitch: true,
+    bio: 'Ratwig lives in a dumpster behind Sal\'s Pizzeria and has snitched on literally everyone in the criminal underworld except you. He swears you\'re different and flashes that gold tooth when he promises he\'d never rat you out. Everyone else thought they were special too. He pays rent to the raccoons.',
+    img: '/PIC_027.png',
+    dateAdded: '2025-08-21'
+  },
+    {
+    id: 28,
+    name: 'Screwy Louie',
+    age: 55,
+    residence: "Buckshort Home for the Criminal Insane, TN",
+    fee: 9999,
+    years: 30,
+    skills: "Intimidation, More Intimidation",
+    servedTime: true,
+    snitch: false,
+    bio: 'Screwy Louie escaped from Buckshort Home for the Criminal Insane in Tennessee and nobody\'s quite sure when or how. He kept the straightjacket because he says it gives the best hugs. Shows up wherever crimes need doing, talks to lamp posts like old friends, and laughs at his own jokes before he tells them.',
+    img: '/PIC_023.png',
+    dateAdded: '2025-08-12'
+  },
+    {
+    id: 29,
+    name: 'Annabelleleigh',
+    age: 105,
+    residence: "Probably Your Attic",
+    fee: 12500,
+    years: 105,
+    skills: "Demonic Possession, Mind Control",
+    servedTime: false,
+    snitch: false,
+    bio: "Annabelleleigh has been getting thrown away for 105 years and keeps showing up in people's attics anyway. She makes grown men rob banks by batting her porcelain eyelashes, then giggles when they get arrested. Her favorite trick is making people forget she was ever there until the police find her sitting in their passenger seat. ",
+    img: '/PIC_030.png',
+    dateAdded: '2025-08-14'
+  },
+    {
+    id: 30,
+    name: 'Grotessa Monroe',
+    age: 45,
+    residence: "Albuquerque, NM",
+    fee: 14500,
+    years: 22,
+    skills: "Appetite for Destruction, Hunger for Chaos",
+    servedTime: false,
+    snitch: false,
+    bio: "Grotessa was Miss Texas 2018 before the whole zombie thing happened. She still insists on perfect posture and keeps reapplying lipstick even though half her face falls off regularly. She traded pageant diets for cannibalism. Her talent was baton twirling, which comes in handy more often than you'd think.",
+    img: '/PIC_026.png',
+    dateAdded: '2025-08-15'
   }
 ];
 
