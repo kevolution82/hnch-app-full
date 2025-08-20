@@ -14,7 +14,7 @@ import java.util.Map;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "https://gemini-api-j6vx.onrender.com")
 @RestController
 @RequestMapping("/api/messages")
 public class MessageController {
@@ -78,7 +78,7 @@ userMsg.setTimestamp(LocalDateTime.now());
 messageRepo.save(userMsg);
 
 // get AI reply from Gemini server
-String geminiApiUrl = "http://localhost:4000/api/gemini-chat";
+String geminiApiUrl = "https://gemini-api-j6vx.onrender.com/api/gemini-chat";
 String aiReplyText = "sorry, i got nothin' right now.";
 try {
     RestTemplate restTemplate = new RestTemplate();
