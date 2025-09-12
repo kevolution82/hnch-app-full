@@ -121,7 +121,6 @@ return (
         </div>
       ) : (
         <>
-          {/* Sorting options */}
           <div className="filter-bar">
             <label>Sort By: </label>
             <select onChange={(e) => setSortBy(e.target.value)} value={sortBy}>
@@ -134,7 +133,6 @@ return (
             </select>
           </div>
 
-           {/* This is where each goon shows up with full info and a remove button. Use icons to take up less space */}
           <div className="goon-list">
             {sortedGoons.map((goon) => (
               <div key={goon.id} className="goon-card">

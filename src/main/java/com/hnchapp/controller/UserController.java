@@ -29,13 +29,13 @@ public class UserController {
         try {
             if (userRepo.findByUsername(user.getUsername()) != null) {
                 // if username already exists 
-                return ResponseEntity.status(409).body(Collections.singletonMap("error", "Username already exists!"));
+                return ResponseEntity.status(409).body(Collections.singletonMap("error", "Username already exists! C'mon!"));
             }
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User saved = userRepo.save(user);
             return ResponseEntity.ok(saved);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(Collections.singletonMap("error", "Registration failed!"));
+            return ResponseEntity.status(500).body(Collections.singletonMap("error", "Registration failed! Jeez!"));
         }
     }
 
